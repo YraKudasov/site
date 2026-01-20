@@ -34,7 +34,7 @@ nav .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 0;
+    padding: 1.5rem 2rem;
 }
 
 .logo {
@@ -56,6 +56,10 @@ nav .container {
 
 .nav-links li {
     margin-left: 2.5rem;
+}
+
+.nav-links li:first-child {
+    margin-left: 0;
 }
 
 .nav-links a {
@@ -821,9 +825,11 @@ footer p {
     .hamburger {
         display: flex;
         position: absolute;
-        top: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
         right: 1.5rem;
         padding: 0.75rem;
+        margin-top: -2px;
     }
 
     .nav-links {
@@ -884,9 +890,10 @@ footer p {
     }
 
     .about-preview, .about, .employees, .contact, .features, .products-showcase, .stats, .testimonials, .cta {
-        margin: 2rem 1rem;
+        margin: 2rem auto;
         padding: 2rem;
         border-radius: 15px;
+        max-width: calc(100% - 2rem);
     }
 
     .about h2, .employees h2, .contact h2, .features h2, .products-showcase h2, .stats h2, .testimonials h2, .cta h2 {
@@ -950,8 +957,9 @@ footer p {
     }
 
     .about-preview, .about, .employees, .contact {
-        margin: 1rem 0.5rem;
+        margin: 1rem auto;
         padding: 1.5rem;
+        max-width: calc(100% - 1rem);
     }
 
     .about h2, .employees h2, .contact h2 {
