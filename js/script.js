@@ -85,6 +85,40 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// Catalog sidebar functionality - simplified for all systems view
+function initCatalog() {
+    const systemLinks = document.querySelectorAll('.system-link');
+
+    // System link click handler - just toggle the series list visibility
+    systemLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const systemId = this.getAttribute('data-system');
+            const seriesList = document.getElementById(`${systemId}-series`);
+
+            // Toggle active class
+            systemLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            // Toggle series list visibility
+            document.querySelectorAll('.series-list').forEach(list => {
+                if (list.id === `${systemId}-series`) {
+                    list.style.display = list.style.display === 'block' ? 'none' : 'block';
+                } else {
+                    list.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Initialize with first system active and series list visible
+    const firstSystemLink = document.querySelector('.system-link');
+    if (firstSystemLink) {
+        firstSystemLink.click();
+    }
+}
+
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Hamburger menu
@@ -96,5 +130,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const regionSelect = document.getElementById('region');
     if (regionSelect) {
         regionSelect.addEventListener('change', handleRegionChange);
+    }
+
+    // Catalog functionality
+    if (document.querySelector('.catalog-sidebar')) {
+        initCatalog();
     }
 });

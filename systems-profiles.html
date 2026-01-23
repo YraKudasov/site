@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Системы профилей - Bimax Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="contact-info">
+                    <a href="tel:+78442123456" class="contact-link">
+                        <span class="icon">📞</span> +7 (8442) 123-456
+                    </a>
+                    <a href="mailto:info@bimaxpro.ru" class="contact-link">
+                        <span class="icon">✉️</span> info@bimaxpro.ru
+                    </a>
+                    <span class="location">
+                        <span class="icon">📍</span> Волгоградская область
+                    </span>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container">
+                <img src="images/logo.png" alt="Bimax Pro" class="logo">
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Системы профилей</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="systems-profiles.html">Все системы</a></li>
+                            <li><a href="alneо.html">Алнео</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="about.html">О компании</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="catalog-header">
+            <div class="container">
+                <h1>Каталог профильных систем</h1>
+                <p>Выберите подходящую систему профилей для ваших окон и дверей</p>
+            </div>
+        </section>
+
+        <section class="catalog-content">
+            <div class="container">
+                <div class="catalog-layout">
+                    <!-- Sidebar -->
+                    <aside class="catalog-sidebar">
+                        <div class="sidebar-section">
+                            <h3 class="sidebar-title">Профильные системы</h3>
+                            <ul class="system-list">
+                                <li class="system-item">
+                                    <a href="alneо.html" class="system-link active" data-system="alneо">
+                                        <span class="system-name">Алнео</span>
+                                        <span class="expand-icon">▶</span>
+                                    </a>
+                                    <ul class="series-list" id="alneо-series">
+                                        <li><a href="alt72.html" class="series-link" data-series="alt72">ALT 72</a></li>
+                                        <li><a href="al45.html" class="series-link" data-series="al45">AL 45</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+
+                    <!-- Main Content -->
+                    <div class="catalog-main">
+                        <!-- All Systems Grid -->
+                        <div class="all-systems-grid">
+                            <div class="system-card">
+                                <div class="system-card-image">
+                                    <img src="images/Alneo_ALT_72.png" alt="ALT 72">
+                                </div>
+                                <div class="system-card-info">
+                                    <h3>ALT 72</h3>
+                                    <p>Высококачественная система с терморазрывом для теплого остекления</p>
+                                    <a href="alt72.html" class="btn-details">Подробнее</a>
+                                </div>
+                            </div>
+
+                            <div class="system-card">
+                                <div class="system-card-image">
+                                    <img src="images/Alneo_AL_45.png" alt="AL 45">
+                                </div>
+                                <div class="system-card-info">
+                                    <h3>AL 45</h3>
+                                    <p>Классическая система для холодного остекления и технических помещений</p>
+                                    <a href="al45.html" class="btn-details">Подробнее</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Bimax Pro. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
