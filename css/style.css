@@ -1188,6 +1188,22 @@ section {
     border-left: 3px solid transparent;
 }
 
+/* Custom classes for brand and series font sizes */
+.brand-link {
+    font-size: 3.5rem !important;
+    font-weight: 900 !important;
+    color: #2c3e50 !important;
+    line-height: 1.1;
+    letter-spacing: 1px;
+    padding: 0.5rem 0;
+    display: block;
+}
+
+.series-link {
+    font-size: 0.8rem !important;
+    font-weight: 400 !important;
+}
+
 .series-link:hover, .series-link.active {
     background: rgba(52, 152, 219, 0.1);
     color: #3498db;
@@ -1211,8 +1227,8 @@ section {
 .all-systems-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 /* System Card Styles */
@@ -1316,6 +1332,7 @@ section {
     font-size: 0.9rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    text-align: center;
 }
 
 .system-card-info .btn-details:hover {
@@ -1428,6 +1445,7 @@ section {
     font-size: 0.9rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    text-align: center;
 }
 
 .btn-details:hover {
@@ -2209,6 +2227,11 @@ footer p {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Responsive grid for compact series */
+    .series-grid.compact {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     /* Mobile catalog layout */
     .catalog-layout {
         grid-template-columns: 1fr;
@@ -2278,6 +2301,14 @@ footer p {
 
     .employee-card {
         padding: 1.5rem;
+    }
+
+    /* Fix button alignment on mobile */
+    .system-card-info .btn-details {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
     }
 
     .region-selector {
