@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Special handling for "Системы профилей" dropdown on mobile
-    const systemsProfileToggle = document.querySelector('.dropdown-toggle[href="#"]');
+    const systemsProfileToggle = document.querySelector('.dropdown-toggle[href="systems-profiles.html"]');
     if (systemsProfileToggle) {
         systemsProfileToggle.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) {

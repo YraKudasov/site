@@ -109,6 +109,7 @@ nav .container {
     font-size: 1.1rem;
     position: relative;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .nav-links a::after {
@@ -142,10 +143,12 @@ nav .container {
 }
 
 .dropdown-toggle::after {
-    content: '▼';
+    content: '';
     font-size: 0.8rem;
     margin-left: 0.5rem;
     transition: transform 0.3s ease;
+    vertical-align: middle;
+    display: none;
 }
 
 .dropdown:hover .dropdown-toggle::after {
@@ -2073,6 +2076,48 @@ footer p {
 
     .about h2, .employees h2, .contact h2 {
         font-size: 2rem;
+    }
+}
+
+/* Fix navigation button wrapping on medium screens */
+@media (max-width: 900px) {
+    .nav-links li {
+        margin-left: 1.5rem;
+    }
+
+    .nav-links a {
+        font-size: 1rem;
+    }
+
+    .dropdown-toggle::after {
+        margin-left: 0.4rem;
+    }
+}
+
+@media (max-width: 850px) {
+    .nav-links li {
+        margin-left: 1rem;
+    }
+
+    .nav-links a {
+        font-size: 0.95rem;
+    }
+
+    nav .container {
+        padding: 1rem 1.5rem;
+    }
+
+    .dropdown-toggle::after {
+        margin-left: 0.3rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* Intermediate breakpoint for system cards layout */
+@media (max-width: 1020px) {
+    /* Show 2 cards per row instead of 4 when screen is between 768px and 1020px */
+    .series-grid.compact {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
