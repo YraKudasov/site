@@ -588,6 +588,104 @@ section {
     }
 }
 
+/* Window Systems section */
+.window-systems {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 5rem 0;
+}
+
+.window-systems h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.systems-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.system-card-placeholder {
+    /* Invisible placeholder to maintain grid layout */
+    visibility: hidden;
+}
+
+.system-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.system-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.system-image {
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+}
+
+.system-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.system-card:hover .system-image img {
+    transform: scale(1.03);
+}
+
+.system-info {
+    padding: 1rem;
+    text-align: center;
+}
+
+.system-info h3 {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.system-info p {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+}
+
+.btn-details {
+    display: inline-block;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.25);
+}
+
+.btn-details:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.35);
+}
+
 /* Features section */
 .features {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -2114,10 +2212,17 @@ footer p {
 }
 
 /* Intermediate breakpoint for system cards layout */
-@media (max-width: 1020px) {
-    /* Show 2 cards per row instead of 4 when screen is between 768px and 1020px */
-    .series-grid.compact {
+@media (max-width: 1024px) {
+    /* Show 2 cards per row instead of 4 when screen is between 768px and 1024px */
+    .systems-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Show 1 card per row on mobile devices */
+    .systems-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -2262,9 +2367,15 @@ footer p {
         font-size: 1.3rem;
     }
 
-    .features-grid, .products-grid, .stats-grid, .testimonials-grid, .systems-grid, .benefits-grid {
+    .features-grid, .products-grid, .stats-grid, .testimonials-grid, .benefits-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+
+    /* Keep 4 cards layout for window systems on tablet */
+    .systems-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
 
     /* Responsive grid for system cards */
