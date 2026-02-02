@@ -1311,6 +1311,43 @@ section {
     border-left-color: #3498db;
 }
 
+.sub-series-list {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.sub-series-list li {
+    margin-bottom: 6px;
+}
+
+.sub-series-list a {
+    color: #888;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.sub-series-list a {
+    color: #888;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.sub-series-list a:hover {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    padding-left: 12px;
+}
+
 .coming-soon {
     display: block;
     padding: 0.75rem 2rem;
