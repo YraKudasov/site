@@ -1,3 +1,37 @@
+// Загрузка хедера
+async function loadHeader() {
+    try {
+        const response = await fetch('header.html');
+        if (!response.ok) {
+            throw new Error('Не удалось загрузить хедер');
+        }
+        const headerHtml = await response.text();
+        const headerContainer = document.querySelector('.header-container');
+        if (headerContainer) {
+            headerContainer.innerHTML = headerHtml;
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки хедера:', error);
+    }
+}
+
+// Загрузка футера
+async function loadFooter() {
+    try {
+        const response = await fetch('footer.html');
+        if (!response.ok) {
+            throw new Error('Не удалось загрузить футер');
+        }
+        const footerHtml = await response.text();
+        const footerContainer = document.querySelector('.footer-container');
+        if (footerContainer) {
+            footerContainer.innerHTML = footerHtml;
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки футера:', error);
+    }
+}
+
 // Manager data for each region
 const managers = {
     volgograd: {
@@ -130,7 +164,11 @@ function initCatalog() {
 }
 
 // Initialize event listeners when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Загружаем хедер и футер
+    await loadHeader();
+    await loadFooter();
+    
     // Hamburger menu
     if (hamburger) {
         hamburger.addEventListener('click', toggleMenu);
