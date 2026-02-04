@@ -65,42 +65,8 @@ async function loadHeader() {
             }
         });
 
-        // Add dropdown toggle functionality for mobile menu
-        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-        dropdownToggles.forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                // Only handle clicks in mobile menu
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const dropdownMenu = this.nextElementSibling;
-                    const isActive = this.classList.contains('active');
-
-                    // Close all other dropdowns
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.style.display = 'none';
-                        }
-                    });
-
-                    document.querySelectorAll('.dropdown-toggle').forEach(otherToggle => {
-                        if (otherToggle !== this) {
-                            otherToggle.classList.remove('active');
-                        }
-                    });
-
-                    // Toggle current dropdown
-                    if (isActive) {
-                        dropdownMenu.style.display = 'none';
-                        this.classList.remove('active');
-                    } else {
-                        dropdownMenu.style.display = 'block';
-                        this.classList.add('active');
-                    }
-                }
-            });
-        });
+        // Remove dropdown toggle functionality for mobile menu
+        // Now dropdown links will directly navigate to their href
 
     } catch (error) {
         console.error('Ошибка загрузки хедера:', error);
