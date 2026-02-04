@@ -1,0 +1,90 @@
+[
+  {
+    "id": "alneo",
+    "name": "Алнео",
+    "title": "Алнео",
+    "description": "Алюминиевые системы Алнео",
+    "products": [
+      {
+        "id": "alt72",
+        "name": "ALT 72",
+        "title": "ALT 72",
+        "description": "С терморазрывом для теплого остекления",
+        "image": "images/Alneo_ALT_72.png",
+        "link": "product-template.html?id=alt72"
+      },
+      {
+        "id": "al45",
+        "name": "AL 45",
+        "title": "AL 45",
+        "description": "Без терморазрыва для холодного остекления",
+        "image": "images/Alneo_AL_45.png",
+        "link": "product-template.html?id=al45"
+      }
+    ]
+  },
+  {
+    "id": "topline",
+    "name": "TopLine",
+    "title": "TopLine",
+    "description": "Алюминиевые системы TopLine",
+    "products": [
+      {
+        "id": "topline-3k",
+        "name": "TopLine 3k",
+        "title": "TopLine 3k",
+        "description": "С терморазрывом для теплого остекления",
+        "image": "images/Topline_3k.jpg",
+        "link": "product-template.html?id=topline-3k"
+      },
+      {
+        "id": "topline-5k",
+        "name": "TopLine 5k",
+        "title": "TopLine 5k",
+        "description": "Без терморазрыва для холодного остекления",
+        "image": "images/Topline_5k.jpg",
+        "link": "product-template.html?id=topline-5k"
+      }
+    ]
+  },
+  {
+    "id": "all-systems",
+    "name": "Все системы",
+    "title": "Каталог профильных систем",
+    "description": "Выберите подходящую систему профилей для ваших окон и дверей",
+    "products": [
+      {
+        "id": "alt72",
+        "name": "ALT 72",
+        "title": "ALT 72",
+        "description": "С терморазрывом для теплого остекления",
+        "image": "images/Alneo_ALT_72.png",
+        "link": "product-template.html?id=alt72"
+      },
+      {
+        "id": "al45",
+        "name": "AL 45",
+        "title": "AL 45",
+        "description": "Без терморазрыва для холодного остекления",
+        "image": "images/Alneo_AL_45.png",
+        "link": "product-template.html?id=al45"
+      },
+      {
+        "id": "topline-3k",
+        "name": "TopLine 3k",
+        "title": "TopLine 3k",
+        "description": "С терморазрывом для теплого остекления",
+        "image": "images/Topline_3k.jpg",
+        "link": "product-template.html?id=topline-3k"
+      },
+      {
+        "id": "topline-5k",
+        "name": "TopLine 5k",
+        "title": "TopLine 5k",
+        "description": "Без терморазрыва для холодного остекления",
+        "image": "images/Topline_5k.jpg",
+        "link": "product-template.html?id=topline-5k"
+      }
+    ]
+  }
+]

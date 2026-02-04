@@ -1,7 +1,7 @@
 // Загрузка данных о продуктах
 async function loadProductsData() {
     try {
-        const response = await fetch('products-data.json');
+const response = await fetch('data/products-data.json');
         if (!response.ok) {
             throw new Error('Не удалось загрузить данные о продуктах');
         }
@@ -15,7 +15,7 @@ async function loadProductsData() {
 // Загрузка хедера
 async function loadHeader() {
     try {
-        const response = await fetch('header.html');
+const response = await fetch('../header.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить хедер');
         }
@@ -32,7 +32,7 @@ async function loadHeader() {
 // Загрузка футера
 async function loadFooter() {
     try {
-        const response = await fetch('footer.html');
+const response = await fetch('../footer.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить футер');
         }
@@ -49,7 +49,7 @@ async function loadFooter() {
 // Загрузка сайдбара
 async function loadSidebar() {
     try {
-        const response = await fetch('sidebar.html');
+const response = await fetch('../sidebar.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить сайдбар');
         }
