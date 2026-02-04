@@ -1,7 +1,7 @@
 // Загрузка данных о брендах
 async function loadBrandsData() {
     try {
-const response = await fetch('data/brands-data.json');
+        const response = await fetch('data/brands-data.json');
         if (!response.ok) {
             throw new Error('Не удалось загрузить данные о брендах');
         }
@@ -15,7 +15,7 @@ const response = await fetch('data/brands-data.json');
 // Загрузка хедера
 async function loadHeader() {
     try {
-const response = await fetch('../header.html');
+        const response = await fetch('header.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить хедер');
         }
@@ -32,7 +32,7 @@ const response = await fetch('../header.html');
 // Загрузка футера
 async function loadFooter() {
     try {
-const response = await fetch('../footer.html');
+        const response = await fetch('footer.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить футер');
         }
@@ -49,7 +49,7 @@ const response = await fetch('../footer.html');
 // Загрузка сайдбара
 async function loadSidebar() {
     try {
-const response = await fetch('../sidebar.html');
+        const response = await fetch('sidebar.html');
         if (!response.ok) {
             throw new Error('Не удалось загрузить сайдбар');
         }
