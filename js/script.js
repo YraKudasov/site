@@ -10,6 +10,84 @@ async function loadHeader() {
         if (headerContainer) {
             headerContainer.innerHTML = headerHtml;
         }
+
+        // Initialize hamburger menu functionality after header is loaded
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+
+            // Close all dropdowns when opening mobile menu
+            if (navLinks.classList.contains('active')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                    toggle.classList.remove('active');
+                });
+            }
+        }
+
+        // Add click event to hamburger
+        if (hamburger) {
+            hamburger.addEventListener('click', toggleMenu);
+        }
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Add dropdown toggle functionality for mobile menu
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                // Only handle clicks in mobile menu
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const dropdownMenu = this.nextElementSibling;
+                    const isActive = this.classList.contains('active');
+
+                    // Close all other dropdowns
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.style.display = 'none';
+                        }
+                    });
+
+                    document.querySelectorAll('.dropdown-toggle').forEach(otherToggle => {
+                        if (otherToggle !== this) {
+                            otherToggle.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current dropdown
+                    if (isActive) {
+                        dropdownMenu.style.display = 'none';
+                        this.classList.remove('active');
+                    } else {
+                        dropdownMenu.style.display = 'block';
+                        this.classList.add('active');
+                    }
+                }
+            });
+        });
+
     } catch (error) {
         console.error('Ошибка загрузки хедера:', error);
     }
@@ -94,40 +172,6 @@ function handleRegionChange() {
     }
 }
 
-// Hamburger menu functionality
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-
-function toggleMenu() {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-
-    // Close all dropdowns when opening mobile menu
-    if (navLinks.classList.contains('active')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.style.display = 'none';
-        });
-        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-            toggle.classList.remove('active');
-        });
-    }
-}
-
-// Close menu when clicking on a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-    });
-});
-
-// Close menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-    }
-});
 
 // Catalog sidebar functionality - simplified for all systems view
 function initCatalog() {
@@ -169,11 +213,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     await loadHeader();
     await loadFooter();
     
-    // Hamburger menu
-    if (hamburger) {
-        hamburger.addEventListener('click', toggleMenu);
-    }
-
     // Region selector
     const regionSelect = document.getElementById('region');
     if (regionSelect) {
@@ -192,57 +231,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
         document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
             toggle.classList.remove('active');
-        });
-    }
-
-    // Add dropdown toggle functionality for mobile menu
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            // Only handle clicks in mobile menu
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const dropdownMenu = this.nextElementSibling;
-                const isActive = this.classList.contains('active');
-
-                // Close all other dropdowns
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    if (menu !== dropdownMenu) {
-                        menu.style.display = 'none';
-                    }
-                });
-
-                document.querySelectorAll('.dropdown-toggle').forEach(otherToggle => {
-                    if (otherToggle !== this) {
-                        otherToggle.classList.remove('active');
-                    }
-                });
-
-                // Toggle current dropdown
-                if (isActive) {
-                    dropdownMenu.style.display = 'none';
-                    this.classList.remove('active');
-                } else {
-                    dropdownMenu.style.display = 'block';
-                    this.classList.add('active');
-                }
-            }
-        });
-    });
-
-    // Special handling for "Системы профилей" dropdown on mobile
-    const systemsProfileToggle = document.querySelector('.dropdown-toggle[href="systems-profiles.html"]');
-    if (systemsProfileToggle) {
-        systemsProfileToggle.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                // On mobile, navigate directly to systems-profiles.html
-                // instead of showing dropdown
-                e.preventDefault();
-                window.location.href = 'systems-profiles.html';
-            }
         });
     }
 });
