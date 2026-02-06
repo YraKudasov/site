@@ -527,13 +527,17 @@
         // Simple password protection (replace with secure authentication in production)
         // Password is configured in .env file on server side
         const ADMIN_PASSWORD = 'admbimax5'; // Note: This should match server-side password
-        let isLoggedIn = false;
+        let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
         let catalogData = {};
         let editingBrand = null;
         let editingProduct = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            if (isLoggedIn) {
+                document.getElementById('passwordModal').classList.add('hidden');
+                document.getElementById('adminPanel').style.display = 'block';
+            }
             loadCatalogData();
         });
 
@@ -541,6 +545,7 @@
             const password = document.getElementById('passwordInput').value;
             if (password === ADMIN_PASSWORD) {
                 isLoggedIn = true;
+                localStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('passwordModal').classList.add('hidden');
                 document.getElementById('adminPanel').style.display = 'block';
                 loadCatalogData();
@@ -552,6 +557,7 @@
 
         function logout() {
             isLoggedIn = false;
+            localStorage.removeItem('isLoggedIn');
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('passwordModal').classList.remove('hidden');
             document.getElementById('passwordInput').value = '';
