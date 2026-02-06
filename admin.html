@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Административная панель - Bimax Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Livereload script -->
+    <script src="http://localhost:35729/livereload.js?snipver=1"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .nav {
+            background: #34495e;
+            padding: 15px 30px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav button {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .nav button:hover, .nav button.active {
+            background: #3498db;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-buttons button {
+            padding: 6px 12px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .specs-manager {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+        }
+
+        .spec-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .spec-item input {
+            flex: 1;
+            padding: 8px;
+        }
+
+        .spec-item button {
+            padding: 8px 16px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .spec-item button:hover {
+            background: #c0392b;
+        }
+
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .password-modal.hidden {
+            display: none;
+        }
+
+        .password-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-form input {
+            margin: 15px 0;
+            padding: 12px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .logo-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav {
+                padding: 10px 20px;
+                gap: 10px;
+                overflow-x: auto;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .table {
+                font-size: 12px;
+            }
+            
+            .table th,
+            .table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-form">
+            <h2>Вход в панель управления</h2>
+            <input type="password" id="passwordInput" placeholder="Введите пароль">
+            <div class="button-group">
+                <button class="btn btn-success" onclick="checkPassword()">Войти</button>
+            </div>
+            <div class="alert error" id="passwordError"></div>
+        </div>
+    </div>
+
+    <div class="container" id="adminPanel" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <h1>Административная панель Bimax Pro</h1>
+            <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button class="active" onclick="showSection('brands')">Бренды</button>
+            <button onclick="showSection('products')">Продукты</button>
+            <button onclick="showSection('settings')">Настройки</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Brands Section -->
+            <div class="section active" id="brandsSection">
+                <h2>Управление брендами</h2>
+                <div class="alert" id="brandsAlert"></div>
+                
+                <form id="brandForm">
+                    <div class="form-group">
+                        <label for="brandId">ID бренда:</label>
+                        <input type="text" id="brandId" required placeholder="alneo, topline, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="brandName">Имя бренда:</label>
+                        <input type="text" id="brandName" required placeholder="Алнео, TopLine, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="brandTitle">Заголовок бренда:</label>
+                        <input type="text" id="brandTitle" required placeholder="Алнео - современные окна">
+                    </div>
+                    <div class="form-group">
+                        <label for="brandDescription">Описание бренда:</label>
+                        <textarea id="brandDescription" placeholder="Описание бренда..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="brandImage">Изображение бренда:</label>
+                        <input type="text" id="brandImage" placeholder="images/brand-logo.png">
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">Сохранить бренд</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetBrandForm()">Очистить</button>
+                    </div>
+                </form>
+
+                <h3 style="margin-top: 40px;">Список брендов</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Заголовок</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="brandsTable">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Products Section -->
+            <div class="section" id="productsSection">
+                <h2>Управление продуктами</h2>
+                <div class="alert" id="productsAlert"></div>
+                
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productId">ID продукта:</label>
+                        <input type="text" id="productId" required placeholder="alneo-main, topline-3k, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">Имя продукта:</label>
+                        <input type="text" id="productName" required placeholder="Основной профиль, TopLine 3k, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="productTitle">Заголовок продукта:</label>
+                        <input type="text" id="productTitle" required placeholder="Алнео - основной профиль">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Описание продукта:</label>
+                        <textarea id="productDescription" placeholder="Описание продукта..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage">Изображение продукта:</label>
+                        <input type="text" id="productImage" placeholder="images/product.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="productBrand">Бренд:</label>
+                        <select id="productBrand" required>
+                            <option value="">Выберите бренд</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCtaTitle">Заголовок CTA:</label>
+                        <input type="text" id="productCtaTitle" placeholder="Подробнее о продукте">
+                    </div>
+                    
+                    <div class="specs-manager">
+                        <h4>Характеристики продукта</h4>
+                        <div id="specsContainer"></div>
+                        <button type="button" class="btn btn-secondary" onclick="addSpec()">Добавить характеристику</button>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-success">Сохранить продукт</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetProductForm()">Очистить</button>
+                    </div>
+                </form>
+
+                <h3 style="margin-top: 40px;">Список продуктов</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>Бренд</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="section" id="settingsSection">
+                <h2>Настройки</h2>
+                <div class="alert" id="settingsAlert"></div>
+                
+                <div class="form-group">
+                    <label for="siteTitle">Заголовок сайта:</label>
+                    <input type="text" id="siteTitle" placeholder="Bimax Pro - Производство окон">
+                </div>
+                
+                <div class="form-group">
+                    <label for="siteDescription">Описание сайта:</label>
+                    <textarea id="siteDescription" placeholder="Описание сайта для SEO..."></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="saveSettings()">Сохранить настройки</button>
+                    <button class="btn btn-secondary" onclick="resetSettings()">Сбросить</button>
+                </div>
+
+                <h3 style="margin-top: 40px;">Данные</h3>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="exportData()">Экспортировать данные</button>
+                    <button class="btn btn-danger" onclick="clearData()">Очистить все данные</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple password protection (replace with secure authentication in production)
+        // Password is configured in .env file on server side
+        const ADMIN_PASSWORD = 'admbimax5'; // Note: This should match server-side password
+        let isLoggedIn = false;
+        let catalogData = {};
+        let editingBrand = null;
+        let editingProduct = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCatalogData();
+        });
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                document.getElementById('passwordModal').classList.add('hidden');
+                document.getElementById('adminPanel').style.display = 'block';
+                loadCatalogData();
+            } else {
+                document.getElementById('passwordError').textContent = 'Неправильный пароль';
+                document.getElementById('passwordError').classList.add('error');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('passwordModal').classList.remove('hidden');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('passwordError').classList.remove('error');
+        }
+
+        async function loadCatalogData() {
+            try {
+                const response = await fetch('data/catalog-data.json');
+                if (!response.ok) throw new Error('Ошибка загрузки данных');
+                catalogData = await response.json();
+                
+                // Initialize catalog if empty
+                if (!catalogData.brands) catalogData.brands = [];
+                if (!catalogData.products) catalogData.products = [];
+                if (!catalogData.settings) catalogData.settings = {};
+                
+                renderBrands();
+                renderProducts();
+                renderSettings();
+                updateProductBrandSelect();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Ошибка загрузки данных: ' + error.message, 'error', 'brands');
+            }
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId + 'Section').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showAlert(message, type, section) {
+            const alertId = section + 'Alert';
+            const alertElement = document.getElementById(alertId);
+            alertElement.textContent = message;
+            alertElement.className = 'alert ' + type;
+            alertElement.style.display = 'block';
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 3000);
+        }
+
+        // Brands management
+        function renderBrands() {
+            const tbody = document.getElementById('brandsTable');
+            tbody.innerHTML = '';
+            
+            catalogData.brands.forEach(brand => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${brand.id}</td>
+                    <td>${brand.name}</td>
+                    <td>${brand.title}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="editBrand('${brand.id}')">Редактировать</button>
+                            <button class="delete-btn" onclick="deleteBrand('${brand.id}')">Удалить</button>
+                        </div>
+                    </td>
+                `;
+            });
+        }
+
+        function editBrand(brandId) {
+            editingBrand = catalogData.brands.find(brand => brand.id === brandId);
+            if (editingBrand) {
+                document.getElementById('brandId').value = editingBrand.id;
+                document.getElementById('brandName').value = editingBrand.name;
+                document.getElementById('brandTitle').value = editingBrand.title;
+                document.getElementById('brandDescription').value = editingBrand.description;
+                document.getElementById('brandImage').value = editingBrand.image;
+            }
+        }
+
+        function deleteBrand(brandId) {
+            if (confirm('Вы уверены, что хотите удалить этот бренд?')) {
+                // Remove brand from brands array
+                catalogData.brands = catalogData.brands.filter(brand => brand.id !== brandId);
+                
+                // Remove products associated with this brand
+                catalogData.products = catalogData.products.filter(product => product.brandId !== brandId);
+                
+                saveCatalogData();
+                renderBrands();
+                renderProducts();
+                updateProductBrandSelect();
+                showAlert('Бренд удален успешно', 'success', 'brands');
+            }
+        }
+
+        function resetBrandForm() {
+            editingBrand = null;
+            document.getElementById('brandForm').reset();
+        }
+
+        document.getElementById('brandForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const brandData = {
+                id: document.getElementById('brandId').value.trim(),
+                name: document.getElementById('brandName').value.trim(),
+                title: document.getElementById('brandTitle').value.trim(),
+                description: document.getElementById('brandDescription').value.trim(),
+                image: document.getElementById('brandImage').value.trim()
+            };
+            
+            // Validate
+            if (!isValidId(brandData.id)) {
+                showAlert('ID должен содержать только буквы, цифры и подчеркивания', 'error', 'brands');
+                return;
+            }
+            
+            if (editingBrand) {
+                // Update existing brand
+                const index = catalogData.brands.findIndex(b => b.id === editingBrand.id);
+                catalogData.brands[index] = brandData;
+                
+                // Update product brandId if brand id changed
+                if (editingBrand.id !== brandData.id) {
+                    catalogData.products = catalogData.products.map(product => {
+                        if (product.brandId === editingBrand.id) {
+                            return { ...product, brandId: brandData.id };
+                        }
+                        return product;
+                    });
+                }
+            } else {
+                // Check if brand already exists
+                if (catalogData.brands.some(brand => brand.id === brandData.id)) {
+                    showAlert('Бренд с таким ID уже существует', 'error', 'brands');
+                    return;
+                }
+                catalogData.brands.push(brandData);
+            }
+            
+            saveCatalogData();
+            renderBrands();
+            updateProductBrandSelect();
+            resetBrandForm();
+            showAlert('Бренд сохранен успешно', 'success', 'brands');
+        });
+
+        // Products management
+        function renderProducts() {
+            const tbody = document.getElementById('productsTable');
+            tbody.innerHTML = '';
+            
+            catalogData.products.forEach(product => {
+                const brand = catalogData.brands.find(b => b.id === product.brandId);
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${brand ? brand.name : 'Unknown'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="editProduct('${product.id}')">Редактировать</button>
+                            <button class="delete-btn" onclick="deleteProduct('${product.id}')">Удалить</button>
+                        </div>
+                    </td>
+                `;
+            });
+        }
+
+        function editProduct(productId) {
+            editingProduct = catalogData.products.find(product => product.id === productId);
+            if (editingProduct) {
+                document.getElementById('productId').value = editingProduct.id;
+                document.getElementById('productName').value = editingProduct.name;
+                document.getElementById('productTitle').value = editingProduct.title;
+                document.getElementById('productDescription').value = editingProduct.description;
+                document.getElementById('productImage').value = editingProduct.image;
+                document.getElementById('productBrand').value = editingProduct.brandId;
+                document.getElementById('productCtaTitle').value = editingProduct.ctaTitle;
+                
+                // Render specs
+                renderSpecs(editingProduct.specs || []);
+            }
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Вы уверены, что хотите удалить этот продукт?')) {
+                catalogData.products = catalogData.products.filter(product => product.id !== productId);
+                saveCatalogData();
+                renderProducts();
+                showAlert('Продукт удален успешно', 'success', 'products');
+            }
+        }
+
+        function resetProductForm() {
+            editingProduct = null;
+            document.getElementById('productForm').reset();
+            renderSpecs([]);
+        }
+
+        function renderSpecs(specs) {
+            const container = document.getElementById('specsContainer');
+            container.innerHTML = '';
+            
+            specs.forEach((spec, index) => {
+                addSpec(spec.name, spec.value);
+            });
+            
+            if (specs.length === 0) {
+                addSpec();
+            }
+        }
+
+        function addSpec(name = '', value = '') {
+            const container = document.getElementById('specsContainer');
+            const specItem = document.createElement('div');
+            specItem.className = 'spec-item';
+            specItem.innerHTML = `
+                <input type="text" placeholder="Название характеристики" value="${name}">
+                <input type="text" placeholder="Значение" value="${value}">
+                <button onclick="removeSpec(this)">Удалить</button>
+            `;
+            container.appendChild(specItem);
+        }
+
+        function removeSpec(button) {
+            const specItem = button.parentElement;
+            const container = document.getElementById('specsContainer');
+            
+            if (container.children.length > 1) {
+                container.removeChild(specItem);
+            }
+        }
+
+        function updateProductBrandSelect() {
+            const select = document.getElementById('productBrand');
+            select.innerHTML = '<option value="">Выберите бренд</option>';
+            
+            catalogData.brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand.id;
+                option.textContent = brand.name;
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const specs = [];
+            document.querySelectorAll('#specsContainer .spec-item').forEach(item => {
+                const name = item.querySelectorAll('input')[0].value.trim();
+                const value = item.querySelectorAll('input')[1].value.trim();
+                if (name && value) {
+                    specs.push({ name, value });
+                }
+            });
+            
+            const productData = {
+                id: document.getElementById('productId').value.trim(),
+                name: document.getElementById('productName').value.trim(),
+                title: document.getElementById('productTitle').value.trim(),
+                description: document.getElementById('productDescription').value.trim(),
+                image: document.getElementById('productImage').value.trim(),
+                brandId: document.getElementById('productBrand').value,
+                ctaTitle: document.getElementById('productCtaTitle').value.trim(),
+                specs: specs
+            };
+            
+            // Validate
+            if (!isValidId(productData.id)) {
+                showAlert('ID должен содержать только буквы, цифры и подчеркивания', 'error', 'products');
+                return;
+            }
+            
+            if (!productData.brandId) {
+                showAlert('Пожалуйста, выберите бренд', 'error', 'products');
+                return;
+            }
+            
+            if (editingProduct) {
+                // Update existing product
+                const index = catalogData.products.findIndex(p => p.id === editingProduct.id);
+                catalogData.products[index] = productData;
+            } else {
+                // Check if product already exists
+                if (catalogData.products.some(product => product.id === productData.id)) {
+                    showAlert('Продукт с таким ID уже существует', 'error', 'products');
+                    return;
+                }
+                catalogData.products.push(productData);
+            }
+            
+            saveCatalogData();
+            renderProducts();
+            resetProductForm();
+            showAlert('Продукт сохранен успешно', 'success', 'products');
+        });
+
+        // Settings management
+        function renderSettings() {
+            document.getElementById('siteTitle').value = catalogData.settings.siteTitle || '';
+            document.getElementById('siteDescription').value = catalogData.settings.siteDescription || '';
+        }
+
+        function saveSettings() {
+            catalogData.settings = {
+                siteTitle: document.getElementById('siteTitle').value.trim(),
+                siteDescription: document.getElementById('siteDescription').value.trim()
+            };
+            
+            saveCatalogData();
+            showAlert('Настройки сохранены успешно', 'success', 'settings');
+        }
+
+        function resetSettings() {
+            catalogData.settings = {};
+            renderSettings();
+            saveCatalogData();
+            showAlert('Настройки сброшены', 'success', 'settings');
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(catalogData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'catalog-data.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        function clearData() {
+            if (confirm('Вы уверены, что хотите очистить все данные? Это действие нельзя отменить!')) {
+                catalogData = {
+                    brands: [],
+                    products: [],
+                    settings: {}
+                };
+                saveCatalogData();
+                renderBrands();
+                renderProducts();
+                updateProductBrandSelect();
+                renderSettings();
+                showAlert('Все данные очищены', 'success', 'settings');
+            }
+        }
+
+        async function saveCatalogData() {
+            try {
+                const response = await fetch('http://localhost:3001/api/catalog', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        catalogData: catalogData,
+                        password: ADMIN_PASSWORD
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Ошибка сохранения данных');
+                
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message || 'Ошибка сохранения');
+                
+                console.log('Catalog data saved successfully');
+            } catch (error) {
+                console.error('Error saving catalog data:', error);
+                throw error;
+            }
+        }
+
+        function isValidId(id) {
+            const regex = /^[a-zA-Z0-9_]+$/;
+            return regex.test(id);
+        }
+    </script>
+</body>
+</html>

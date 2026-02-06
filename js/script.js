@@ -1,80 +1,4 @@
-// Загрузка хедера
-async function loadHeader() {
-    try {
-        const response = await fetch('header.html');
-        if (!response.ok) {
-            throw new Error('Не удалось загрузить хедер');
-        }
-        const headerHtml = await response.text();
-        const headerContainer = document.querySelector('.header-container');
-        if (headerContainer) {
-            headerContainer.innerHTML = headerHtml;
-        }
-
-        // Initialize hamburger menu functionality after header is loaded
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        function toggleMenu() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-
-            // Close all dropdowns when opening mobile menu
-            if (navLinks.classList.contains('active')) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
-                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-                    toggle.classList.remove('active');
-                });
-            }
-        }
-
-        // Add click event to hamburger
-        if (hamburger) {
-            hamburger.addEventListener('click', toggleMenu);
-        }
-
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-
-        // Remove dropdown toggle functionality for mobile menu
-        // Now dropdown links will directly navigate to their href
-
-    } catch (error) {
-        console.error('Ошибка загрузки хедера:', error);
-    }
-}
-
-// Загрузка футера
-async function loadFooter() {
-    try {
-        const response = await fetch('footer.html');
-        if (!response.ok) {
-            throw new Error('Не удалось загрузить футер');
-        }
-        const footerHtml = await response.text();
-        const footerContainer = document.querySelector('.footer-container');
-        if (footerContainer) {
-            footerContainer.innerHTML = footerHtml;
-        }
-    } catch (error) {
-        console.error('Ошибка загрузки футера:', error);
-    }
-}
+import ComponentsLoader from './modules/components-loader.js';
 
 // Manager data for each region
 const managers = {
@@ -176,8 +100,8 @@ function initCatalog() {
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
     // Загружаем хедер и футер
-    await loadHeader();
-    await loadFooter();
+    await ComponentsLoader.loadHeader();
+    await ComponentsLoader.loadFooter();
     
     // Region selector
     const regionSelect = document.getElementById('region');

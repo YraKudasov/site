@@ -1,0 +1,84 @@
+// Модуль для загрузки и управления данными каталога
+class DataLoader {
+    // Кэш для загруженных данных
+    static cache = null;
+
+    static async loadCatalogData() {
+        // Возвращаем данные из кэша, если они уже загружены
+        if (this.cache) {
+            return this.cache;
+        }
+
+        try {
+            const response = await fetch('data/catalog-data.json');
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить данные каталога');
+            }
+            this.cache = await response.json();
+            return this.cache;
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+            return { brands: [], products: [] };
+        }
+    }
+
+    static async loadProducts() {
+        const catalogData = await this.loadCatalogData();
+        return catalogData.products || [];
+    }
+
+    static async loadBrands() {
+        const catalogData = await this.loadCatalogData();
+        return catalogData.brands || [];
+    }
+
+    static async getProductById(productId) {
+        const products = await this.loadProducts();
+        return products.find(product => product.id === productId);
+    }
+
+    static async getBrandById(brandId) {
+        const brands = await this.loadBrands();
+        return brands.find(brand => brand.id === brandId);
+    }
+
+    static async getProductsByBrand(brandId) {
+        const products = await this.loadProducts();
+        if (brandId === 'all-systems') {
+            return products;
+        }
+        return products.filter(product => product.brandId === brandId);
+    }
+
+    static async getBrandWithProducts(brandId) {
+        console.log('getBrandWithProducts called with brandId:', brandId);
+        
+        const brand = await this.getBrandById(brandId);
+        console.log('Found brand:', brand);
+        
+        if (!brand) return null;
+
+        const products = await this.getProductsByBrand(brandId);
+        console.log('Products for brand:', products);
+        
+        // Фильтрация основного продукта Алнео из списка для бренда "alneo"
+        const filteredProducts = brandId === 'alneo' 
+            ? products.filter(product => product.id !== 'alneo-main') 
+            : products;
+        console.log('Filtered products:', filteredProducts);
+        
+        return {
+            ...brand,
+            products: filteredProducts.map(product => ({
+                id: product.id,
+                name: product.name,
+                title: product.title,
+                description: product.description,
+                image: product.image,
+                link: `product-template.html?id=${product.id}`
+            }))
+        };
+    }
+}
+
+export default DataLoader;
