@@ -1,4 +1,5 @@
 import ComponentsLoader from './modules/components-loader.js';
+import UIUtils from './modules/ui-utils.js';
 
 // Manager data for each region
 const managers = {
@@ -102,6 +103,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Загружаем хедер и футер
     await ComponentsLoader.loadHeader();
     await ComponentsLoader.loadFooter();
+    
+    // Render window systems section on home page
+    if (document.querySelector('.window-systems')) {
+        await UIUtils.renderWindowSystemsSection();
+    }
     
     // Region selector
     const regionSelect = document.getElementById('region');

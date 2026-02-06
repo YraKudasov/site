@@ -4,22 +4,66 @@
       "id": "alneo",
       "name": "Алнео",
       "title": "Алнео",
-      "description": "Алюминиевые системы Алнео"
+      "description": "Алюминиевые системы Алнео",
+      "image": "images/Alneo_ALT_72.png"
     },
     {
       "id": "topline",
       "name": "TopLine",
       "title": "TopLine",
-      "description": "Алюминиевые системы TopLine"
+      "description": "Алюминиевые системы TopLine",
+      "image": "/images/Topline_5k.jpg"
     },
     {
       "id": "all-systems",
       "name": "Все системы",
       "title": "Каталог профильных систем",
       "description": "Выберите подходящую систему профилей для ваших окон и дверей"
+    },
+    {
+      "id": "rrrrr",
+      "name": "rrrrr",
+      "title": "rrrrrrrrr",
+      "description": "rrrrrr",
+      "image": "images/Alneo_AL_45.png"
+    },
+    {
+      "id": "SACAS",
+      "name": "ASDASD",
+      "title": "ASDASD",
+      "description": "ASDASD",
+      "image": "/images/Topline_5k.jpg"
     }
   ],
   "products": [
+    {
+      "id": "rrrrr-product",
+      "name": "Продукт RRRRR",
+      "title": "Продукт RRRRR",
+      "description": "Тестовый продукт для бренда RRRRR",
+      "image": "images/Alneo_AL_45.png",
+      "specs": [
+        {
+          "name": "Монтажная ширина:",
+          "value": "50 мм"
+        },
+        {
+          "name": "Количество камер:",
+          "value": "2"
+        },
+        {
+          "name": "Терморазрыв:",
+          "value": "Нет"
+        },
+        {
+          "name": "Применение:",
+          "value": "Холодное остекление"
+        }
+      ],
+      "ctaTitle": "Заказать продукт RRRRR",
+      "isActive": true,
+      "brandId": "rrrrr"
+    },
     {
       "id": "alt72",
       "name": "ALT 72",
@@ -186,6 +230,16 @@
       "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
       "isActive": false,
       "brandId": "topline"
+    },
+    {
+      "id": "GRGER",
+      "name": "DFXF",
+      "title": "ASDDAD",
+      "description": "ADASD",
+      "image": "images/Alneo_ALT_72.png",
+      "brandId": "topline",
+      "ctaTitle": "GGGG",
+      "specs": []
     }
   ],
   "settings": {}

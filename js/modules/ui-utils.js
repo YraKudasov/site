@@ -53,6 +53,68 @@ class UIUtils {
         }
     }
 
+    static async renderHeaderDropdown() {
+        try {
+            const brands = await DataLoader.loadBrands();
+            const dropdown = document.getElementById('systems-dropdown');
+            if (!dropdown) return;
+
+            // Фильтруем только реальные бренды (не "all-systems")
+            const realBrands = brands.filter(brand => brand.id !== 'all-systems');
+
+            realBrands.forEach(brand => {
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `brands-catalog.html?brand=${brand.id}`;
+                link.textContent = brand.name;
+                li.appendChild(link);
+                dropdown.appendChild(li);
+            });
+
+        } catch (error) {
+            console.error('Ошибка при рендеринге выпадающего меню:', error);
+        }
+    }
+
+    static async renderWindowSystemsSection() {
+        try {
+            const brands = await DataLoader.loadBrands();
+            const systemsGrid = document.querySelector('.window-systems .systems-grid');
+            if (!systemsGrid) return;
+
+            // Фильтруем только реальные бренды (не "all-systems")
+            const realBrands = brands.filter(brand => brand.id !== 'all-systems');
+
+            // Удаляем существующие карточки (кроме placeholder)
+            const existingCards = systemsGrid.querySelectorAll('.system-card');
+            existingCards.forEach(card => card.remove());
+
+            realBrands.forEach(brand => {
+                const systemCard = document.createElement('div');
+                systemCard.className = 'system-card';
+                systemCard.innerHTML = `
+                    <div class="system-image">
+                        <img src="${brand.image || 'images/Alneo_ALT_72.png'}" alt="${brand.name}">
+                    </div>
+                    <div class="system-info">
+                        <h3>${brand.name}</h3>
+                        <a href="brands-catalog.html?brand=${brand.id}" class="btn-details">Подробнее</a>
+                    </div>
+                `;
+                systemsGrid.insertBefore(systemCard, systemsGrid.querySelector('.system-card-placeholder'));
+            });
+
+            // Если больше 2 брендов, удаляем placeholder
+            if (realBrands.length > 2) {
+                const placeholder = systemsGrid.querySelector('.system-card-placeholder');
+                if (placeholder) placeholder.remove();
+            }
+
+        } catch (error) {
+            console.error('Ошибка при рендеринге секции оконных систем:', error);
+        }
+    }
+
     static updateSidebar(activeProductId) {
         const links = document.querySelectorAll('.series-link');
         links.forEach(link => {

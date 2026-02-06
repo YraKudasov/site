@@ -12,6 +12,8 @@ class ComponentsLoader {
             const headerContainer = document.querySelector('.header-container');
             if (headerContainer) {
                 headerContainer.innerHTML = headerHtml;
+                // После загрузки HTML вызываем рендеринг динамического выпадающего меню
+                await UIUtils.renderHeaderDropdown();
             }
 
             // Initialize hamburger menu functionality after header is loaded
