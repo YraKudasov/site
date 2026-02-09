@@ -230,16 +230,6 @@
       "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
       "isActive": false,
       "brandId": "topline"
-    },
-    {
-      "id": "GRGER",
-      "name": "DFXF",
-      "title": "ASDDAD",
-      "description": "ADASD",
-      "image": "images/Alneo_ALT_72.png",
-      "brandId": "topline",
-      "ctaTitle": "GGGG",
-      "specs": []
     }
   ],
   "settings": {}
