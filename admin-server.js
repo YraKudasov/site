@@ -3,11 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const livereload = require('livereload');
 const connectLivereload = require('connect-livereload');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 require('dotenv').config(); // Load environment variables from .env file
 
 const PORT = process.env.PORT || 3001;
 const DATA_FILE = path.join(__dirname, 'data', 'catalog-data.json');
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admbimax5';
+const JWT_SECRET = process.env.JWT_SECRET || 'bimax-pro-admin-secret-key-2024';
+const JWT_EXPIRES_IN = '1h';
+
+// Users data file
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
 
 // Initialize livereload server
 const lrServer = livereload.createServer({
@@ -30,6 +36,58 @@ function sendJSONResponse(res, status, data) {
 function sendHTMLResponse(res, status, content) {
     res.writeHead(status, { 'Content-Type': 'text/html' });
     res.end(content);
+}
+
+// Hash password function
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    return `${salt}:${hash}`;
+}
+
+// Verify password function
+function verifyPassword(password, storedHash) {
+    const [salt, hash] = storedHash.split(':');
+    const verifyHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    return hash === verifyHash;
+}
+
+// Generate JWT token
+function generateAccessToken(user) {
+    return jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+}
+
+// Load users
+function loadUsers() {
+    try {
+        if (!fs.existsSync(USERS_FILE)) {
+            const defaultUsers = [
+                {
+                    id: '1',
+                    username: 'admin',
+                    passwordHash: hashPassword(process.env.ADMIN_PASSWORD || 'admbimax5'),
+                    role: 'admin'
+                }
+            ];
+            fs.writeFileSync(USERS_FILE, JSON.stringify(defaultUsers, null, 2));
+            return defaultUsers;
+        }
+        return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    } catch (error) {
+        console.error('Error loading users:', error);
+        return [];
+    }
+}
+
+// Save users
+function saveUsers(users) {
+    try {
+        fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+        return true;
+    } catch (error) {
+        console.error('Error saving users:', error);
+        return false;
+    }
 }
 
 // Load catalog data
@@ -67,12 +125,30 @@ function saveCatalogData(data) {
     }
 }
 
+// Middleware to verify JWT token
+function verifyToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        sendJSONResponse(res, 401, { success: false, message: 'Access token required' });
+        return;
+    }
+
+    const token = authHeader.substring(7);
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        sendJSONResponse(res, 401, { success: false, message: 'Invalid or expired token' });
+    }
+}
+
 // Create HTTP server
 const server = http.createServer((req, res) => {
     // Enable CORS for all routes
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
         res.writeHead(200);
@@ -80,56 +156,102 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Handle authentication check
-    if (req.url === '/api/auth' && req.method === 'POST') {
+    // Handle login (username/password to JWT)
+    if (req.url === '/api/login' && req.method === 'POST') {
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
         });
         req.on('end', () => {
             try {
-                const { password } = JSON.parse(body);
-                if (password === ADMIN_PASSWORD) {
-                    sendJSONResponse(res, 200, { success: true });
-                } else {
-                    sendJSONResponse(res, 401, { success: false, message: 'Неправильный пароль' });
+                const { username, password } = JSON.parse(body);
+                const users = loadUsers();
+                const user = users.find(u => u.username === username);
+
+                if (!user || !verifyPassword(password, user.passwordHash)) {
+                    sendJSONResponse(res, 401, { success: false, message: 'Invalid username or password' });
+                    return;
                 }
+
+                const accessToken = generateAccessToken(user);
+                sendJSONResponse(res, 200, { success: true, token: accessToken, user: { id: user.id, username: user.username, role: user.role } });
             } catch (error) {
-                sendJSONResponse(res, 400, { success: false, message: 'Некорректный запрос' });
+                sendJSONResponse(res, 400, { success: false, message: 'Invalid request' });
             }
         });
         return;
     }
 
-    // Handle get catalog data
+    // Handle get catalog data (requires authentication)
     if (req.url === '/api/catalog' && req.method === 'GET') {
-        const data = loadCatalogData();
-        sendJSONResponse(res, 200, { success: true, data });
+        verifyToken(req, res, () => {
+            const data = loadCatalogData();
+            sendJSONResponse(res, 200, { success: true, data });
+        });
         return;
     }
 
-    // Handle save catalog data
+    // Handle save catalog data (requires authentication)
     if (req.url === '/api/catalog' && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => {
-            body += chunk.toString();
+        verifyToken(req, res, () => {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                try {
+                    const { catalogData } = JSON.parse(body);
+                    const saved = saveCatalogData(catalogData);
+                    if (saved) {
+                        sendJSONResponse(res, 200, { success: true });
+                    } else {
+                        sendJSONResponse(res, 500, { success: false, message: 'Ошибка сохранения данных' });
+                    }
+                } catch (error) {
+                    console.error('Error saving catalog:', error);
+                    sendJSONResponse(res, 400, { success: false, message: 'Некорректные данные' });
+                }
+            });
         });
-        req.on('end', () => {
-            try {
-                const { catalogData, password } = JSON.parse(body);
-                if (password !== ADMIN_PASSWORD) {
-                    sendJSONResponse(res, 401, { success: false, message: 'Неправильный пароль' });
-                    return;
+        return;
+    }
+
+    // Serve static files
+    if (req.method === 'GET') {
+        let filePath = '';
+        if (req.url === '/') {
+            filePath = path.join(__dirname, 'admin.html');
+        } else {
+            filePath = path.join(__dirname, req.url.substring(1));
+        }
+
+        const extname = String(path.extname(filePath)).toLowerCase();
+        const contentType = {
+            '.html': 'text/html',
+            '.js': 'text/javascript',
+            '.css': 'text/css',
+            '.json': 'application/json',
+            '.png': 'image/png',
+            '.jpg': 'image/jpg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.ico': 'image/x-icon'
+        }[extname] || 'application/octet-stream';
+
+        fs.readFile(filePath, (error, content) => {
+            if (error) {
+                if(error.code == 'ENOENT'){
+                    // File not found
+                    sendHTMLResponse(res, 404, '<h1>404 - Not Found</h1>');
                 }
-                const saved = saveCatalogData(catalogData);
-                if (saved) {
-                    sendJSONResponse(res, 200, { success: true });
-                } else {
-                    sendJSONResponse(res, 500, { success: false, message: 'Ошибка сохранения данных' });
+                else {
+                    // Server error
+                    sendHTMLResponse(res, 500, '<h1>500 - Internal Server Error</h1>');
                 }
-            } catch (error) {
-                console.error('Error saving catalog:', error);
-                sendJSONResponse(res, 400, { success: false, message: 'Некорректные данные' });
+            }
+            else {
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content, 'utf-8');
             }
         });
         return;
@@ -143,5 +265,5 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`Admin server running on http://localhost:${PORT}`);
     console.log('Catalog data file:', DATA_FILE);
-    console.log('Password:', ADMIN_PASSWORD);
+    console.log('Default user: admin / admbimax5');
 });

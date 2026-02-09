@@ -358,9 +358,10 @@
     <div class="password-modal" id="passwordModal">
         <div class="password-form">
             <h2>Вход в панель управления</h2>
-            <input type="password" id="passwordInput" placeholder="Введите пароль">
+            <input type="text" id="usernameInput" placeholder="Имя пользователя">
+            <input type="password" id="passwordInput" placeholder="Пароль">
             <div class="button-group">
-                <button class="btn btn-success" onclick="checkPassword()">Войти</button>
+                <button class="btn btn-success" onclick="login()">Войти</button>
             </div>
             <div class="alert error" id="passwordError"></div>
         </div>
@@ -370,7 +371,10 @@
         <!-- Header -->
         <div class="header">
             <h1>Административная панель Bimax Pro</h1>
-            <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="userInfo" style="color: white;"></span>
+                <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+            </div>
         </div>
 
         <!-- Navigation -->
@@ -524,42 +528,101 @@
     </div>
 
     <script>
-        // Simple password protection (replace with secure authentication in production)
-        // Password is configured in .env file on server side
-        const ADMIN_PASSWORD = 'admbimax5'; // Note: This should match server-side password
+        // JWT Authentication
+        const API_BASE_URL = 'http://localhost:3001';
         let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        let accessToken = localStorage.getItem('accessToken');
+        let user = JSON.parse(localStorage.getItem('user') || 'null');
         let catalogData = {};
         let editingBrand = null;
         let editingProduct = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            if (isLoggedIn) {
-                document.getElementById('passwordModal').classList.add('hidden');
-                document.getElementById('adminPanel').style.display = 'block';
+            // Check if user is logged in with valid token
+            if (isLoggedIn && accessToken) {
+                validateToken().then(valid => {
+                    if (valid) {
+                        document.getElementById('passwordModal').classList.add('hidden');
+                        document.getElementById('adminPanel').style.display = 'block';
+                        document.getElementById('userInfo').textContent = `Пользователь: ${user.username} (${user.role})`;
+                        loadCatalogData();
+                    } else {
+                        logout();
+                    }
+                }).catch(() => {
+                    logout();
+                });
+            } else {
+                loadCatalogData();
             }
-            loadCatalogData();
         });
 
-        function checkPassword() {
+        // Validate JWT token
+        async function validateToken() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/catalog`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Token validation error:', error);
+                return false;
+            }
+        }
+
+        // Login with username and password
+        async function login() {
+            const username = document.getElementById('usernameInput').value;
             const password = document.getElementById('passwordInput').value;
-            if (password === ADMIN_PASSWORD) {
-                isLoggedIn = true;
-                localStorage.setItem('isLoggedIn', 'true');
-                document.getElementById('passwordModal').classList.add('hidden');
-                document.getElementById('adminPanel').style.display = 'block';
-                loadCatalogData();
-            } else {
-                document.getElementById('passwordError').textContent = 'Неправильный пароль';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    isLoggedIn = true;
+                    accessToken = result.token;
+                    user = result.user;
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('accessToken', accessToken);
+                    localStorage.setItem('user', JSON.stringify(user));
+                    document.getElementById('passwordModal').classList.add('hidden');
+                    document.getElementById('adminPanel').style.display = 'block';
+                    document.getElementById('userInfo').textContent = `Пользователь: ${user.username} (${user.role})`;
+                    loadCatalogData();
+                    document.getElementById('passwordError').textContent = '';
+                    document.getElementById('passwordError').classList.remove('error');
+                } else {
+                    document.getElementById('passwordError').textContent = 'Неправильное имя пользователя или пароль';
+                    document.getElementById('passwordError').classList.add('error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('passwordError').textContent = 'Ошибка при входе';
                 document.getElementById('passwordError').classList.add('error');
             }
         }
 
+        // Logout
         function logout() {
             isLoggedIn = false;
+            accessToken = null;
+            user = null;
             localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('passwordModal').classList.remove('hidden');
+            document.getElementById('usernameInput').value = '';
             document.getElementById('passwordInput').value = '';
             document.getElementById('passwordError').textContent = '';
             document.getElementById('passwordError').classList.remove('error');
@@ -567,9 +630,22 @@
 
         async function loadCatalogData() {
             try {
-                const response = await fetch('data/catalog-data.json');
-                if (!response.ok) throw new Error('Ошибка загрузки данных');
-                catalogData = await response.json();
+                const response = await fetch(`${API_BASE_URL}/api/catalog`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки данных');
+                }
+                
+                const result = await response.json();
+                catalogData = result.data;
                 
                 // Initialize catalog if empty
                 if (!catalogData.brands) catalogData.brands = [];
@@ -918,18 +994,24 @@
 
         async function saveCatalogData() {
             try {
-                const response = await fetch('http://localhost:3001/api/catalog', {
+                const response = await fetch(`${API_BASE_URL}/api/catalog`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({
-                        catalogData: catalogData,
-                        password: ADMIN_PASSWORD
+                        catalogData: catalogData
                     })
                 });
                 
-                if (!response.ok) throw new Error('Ошибка сохранения данных');
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка сохранения данных');
+                }
                 
                 const result = await response.json();
                 if (!result.success) throw new Error(result.message || 'Ошибка сохранения');
@@ -937,7 +1019,7 @@
                 console.log('Catalog data saved successfully');
             } catch (error) {
                 console.error('Error saving catalog data:', error);
-                throw error;
+                showAlert('Ошибка сохранения данных: ' + error.message, 'error', 'brands');
             }
         }
 
