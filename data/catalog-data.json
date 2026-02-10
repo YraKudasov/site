@@ -5,14 +5,14 @@
       "name": "Алнео",
       "title": "Алнео",
       "description": "Алюминиевые системы Алнео",
-      "image": "images/Alneo_ALT_72.png"
+      "image": "/images/brands/Alneo.png"
     },
     {
       "id": "topline",
       "name": "TopLine",
       "title": "TopLine",
       "description": "Алюминиевые системы TopLine",
-      "image": "/images/Topline_5k.jpg"
+      "image": "/images/brands/Topline.jpg"
     },
     {
       "id": "all-systems",
@@ -25,14 +25,14 @@
       "name": "rrrrr",
       "title": "rrrrrrrrr",
       "description": "rrrrrr",
-      "image": "images/Alneo_AL_45.png"
+      "image": "/images/brands/Alneo_ALT_72.png"
     },
     {
       "id": "SACAS",
       "name": "ASDASD",
       "title": "ASDASD",
       "description": "ASDASD",
-      "image": "/images/Topline_5k.jpg"
+      "image": "/images/brands/Topline_5k.jpg"
     }
   ],
   "products": [
@@ -41,7 +41,7 @@
       "name": "Продукт RRRRR",
       "title": "Продукт RRRRR",
       "description": "Тестовый продукт для бренда RRRRR",
-      "image": "images/Alneo_AL_45.png",
+      "image": "/images/products/Alneo_AL_45.png",
       "specs": [
         {
           "name": "Монтажная ширина:",
@@ -69,7 +69,7 @@
       "name": "ALT 72",
       "title": "ALT 72",
       "description": "Высококачественная алюминиевая система с терморазрывом для окон и дверей",
-      "image": "images/Alneo_ALT_72.png",
+      "image": "/images/products/Alneo_ALT_72.png",
       "brandId": "alneo",
       "ctaTitle": "Заказать окна из системы ALT 72",
       "specs": [
@@ -112,7 +112,7 @@
       "name": "AL 45",
       "title": "AL 45",
       "description": "Классическая алюминиевая система для холодного остекления",
-      "image": "images/Alneo_AL_45.png",
+      "image": "/images/products/Alneo_AL_45.png",
       "specs": [
         {
           "name": "Монтажная ширина:",
@@ -156,7 +156,7 @@
       "name": "TopLine 5k",
       "title": "TopLine 5k",
       "description": "Алюминиевая система для холодного остекления",
-      "image": "images/Topline_5k.jpg",
+      "image": "/images/products/Topline_5k.jpg",
       "specs": [
         {
           "name": "Монтажная ширина профиля:",
@@ -196,7 +196,7 @@
       "name": "TopLine 3k",
       "title": "TopLine 3k",
       "description": "Алюминиевая система для холодного остекления",
-      "image": "images/Topline_3k.jpg",
+      "image": "/images/products/Topline_3k.jpg",
       "specs": [
         {
           "name": "Монтажная ширина профиля:",

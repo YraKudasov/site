@@ -143,16 +143,184 @@ function verifyToken(req, res, next) {
     }
 }
 
+// Helper function to get image files from directory
+function getImagesFromDirectory(dirPath) {
+    try {
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+            return [];
+        }
+        const files = fs.readdirSync(dirPath);
+        const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
+        return files.filter(file => 
+            imageExtensions.includes(path.extname(file).toLowerCase())
+        ).map(file => `/images/${path.basename(dirPath)}/${file}`);
+    } catch (error) {
+        console.error('Error reading images directory:', error);
+        return [];
+    }
+}
+
 // Create HTTP server
 const server = http.createServer((req, res) => {
     // Enable CORS for all routes
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
         res.writeHead(200);
         res.end();
+        return;
+    }
+
+    // Get brand images list (requires authentication)
+    if (req.url === '/api/brand-images' && req.method === 'GET') {
+        verifyToken(req, res, () => {
+            const images = getImagesFromDirectory(path.join(__dirname, 'images', 'brands'));
+            sendJSONResponse(res, 200, { success: true, images });
+        });
+        return;
+    }
+
+    // Get product images list (requires authentication)
+    if (req.url === '/api/product-images' && req.method === 'GET') {
+        verifyToken(req, res, () => {
+            const images = getImagesFromDirectory(path.join(__dirname, 'images', 'products'));
+            sendJSONResponse(res, 200, { success: true, images });
+        });
+        return;
+    }
+
+    // Upload brand image (requires authentication)
+    if (req.url === '/api/upload-brand-image' && req.method === 'POST') {
+        verifyToken(req, res, () => {
+            let body = [];
+            req.on('data', chunk => {
+                body.push(chunk);
+            });
+            req.on('end', () => {
+                try {
+                    // Parse multipart form data
+                    const boundary = req.headers['content-type'].split('boundary=')[1];
+                    const bodyBuffer = Buffer.concat(body);
+                    const parts = bodyBuffer.toString().split(`--${boundary}`);
+                    
+                    let fileName = '';
+                    let fileData = Buffer.alloc(0);
+                    
+                    parts.forEach(part => {
+                        if (part.includes('Content-Disposition: form-data')) {
+                            // Extract filename
+                            const fileNameMatch = part.match(/filename="([^"]+)"/);
+                            if (fileNameMatch) {
+                                fileName = fileNameMatch[1];
+                                // Extract file data
+                                const fileDataMatch = part.match(/(\r\n\r\n)([\s\S]*)(\r\n--)$/);
+                                if (fileDataMatch) {
+                                    fileData = Buffer.from(fileDataMatch[2], 'binary');
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (!fileName || fileData.length === 0) {
+                        sendJSONResponse(res, 400, { success: false, message: 'No file data' });
+                        return;
+                    }
+                    
+                    // Validate file extension
+                    const validExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
+                    const fileExt = path.extname(fileName).toLowerCase();
+                    if (!validExtensions.includes(fileExt)) {
+                        sendJSONResponse(res, 400, { success: false, message: 'Invalid file type' });
+                        return;
+                    }
+                    
+                    // Generate unique filename
+                    const timestamp = Date.now();
+                    const uniqueFileName = `${timestamp}${fileExt}`;
+                    const savePath = path.join(__dirname, 'images', 'brands', uniqueFileName);
+                    
+                    // Save file
+                    fs.writeFileSync(savePath, fileData);
+                    
+                    sendJSONResponse(res, 200, { 
+                        success: true, 
+                        imageUrl: `/images/brands/${uniqueFileName}` 
+                    });
+                } catch (error) {
+                    console.error('Error uploading brand image:', error);
+                    sendJSONResponse(res, 500, { success: false, message: 'Error uploading image' });
+                }
+            });
+        });
+        return;
+    }
+
+    // Upload product image (requires authentication)
+    if (req.url === '/api/upload-product-image' && req.method === 'POST') {
+        verifyToken(req, res, () => {
+            let body = [];
+            req.on('data', chunk => {
+                body.push(chunk);
+            });
+            req.on('end', () => {
+                try {
+                    // Parse multipart form data
+                    const boundary = req.headers['content-type'].split('boundary=')[1];
+                    const bodyBuffer = Buffer.concat(body);
+                    const parts = bodyBuffer.toString().split(`--${boundary}`);
+                    
+                    let fileName = '';
+                    let fileData = Buffer.alloc(0);
+                    
+                    parts.forEach(part => {
+                        if (part.includes('Content-Disposition: form-data')) {
+                            // Extract filename
+                            const fileNameMatch = part.match(/filename="([^"]+)"/);
+                            if (fileNameMatch) {
+                                fileName = fileNameMatch[1];
+                                // Extract file data
+                                const fileDataMatch = part.match(/(\r\n\r\n)([\s\S]*)(\r\n--)$/);
+                                if (fileDataMatch) {
+                                    fileData = Buffer.from(fileDataMatch[2], 'binary');
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (!fileName || fileData.length === 0) {
+                        sendJSONResponse(res, 400, { success: false, message: 'No file data' });
+                        return;
+                    }
+                    
+                    // Validate file extension
+                    const validExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
+                    const fileExt = path.extname(fileName).toLowerCase();
+                    if (!validExtensions.includes(fileExt)) {
+                        sendJSONResponse(res, 400, { success: false, message: 'Invalid file type' });
+                        return;
+                    }
+                    
+                    // Generate unique filename
+                    const timestamp = Date.now();
+                    const uniqueFileName = `${timestamp}${fileExt}`;
+                    const savePath = path.join(__dirname, 'images', 'products', uniqueFileName);
+                    
+                    // Save file
+                    fs.writeFileSync(savePath, fileData);
+                    
+                    sendJSONResponse(res, 200, { 
+                        success: true, 
+                        imageUrl: `/images/products/${uniqueFileName}` 
+                    });
+                } catch (error) {
+                    console.error('Error uploading product image:', error);
+                    sendJSONResponse(res, 500, { success: false, message: 'Error uploading image' });
+                }
+            });
+        });
         return;
     }
 

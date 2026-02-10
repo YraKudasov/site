@@ -410,7 +410,17 @@
                     </div>
                     <div class="form-group">
                         <label for="brandImage">Изображение бренда:</label>
-                        <input type="text" id="brandImage" placeholder="images/brand-logo.png">
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <select id="brandImageSelect" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                <option value="">Выберите изображение из списка</option>
+                            </select>
+                            <input type="file" id="brandImageUpload" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('brandImageUpload').click()">Загрузить новое</button>
+                        </div>
+                        <input type="text" id="brandImage" placeholder="images/brand-logo.png" style="display: none;">
+                        <div id="brandImagePreview" style="margin-top: 10px;">
+                            <img id="brandImagePreviewImg" class="logo-preview" src="" alt="Предварительный просмотр" style="display: none;">
+                        </div>
                     </div>
                     
                     <div class="button-group">
@@ -458,7 +468,17 @@
                     </div>
                     <div class="form-group">
                         <label for="productImage">Изображение продукта:</label>
-                        <input type="text" id="productImage" placeholder="images/product.jpg">
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <select id="productImageSelect" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                <option value="">Выберите изображение из списка</option>
+                            </select>
+                            <input type="file" id="productImageUpload" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('productImageUpload').click()">Загрузить новое</button>
+                        </div>
+                        <input type="text" id="productImage" placeholder="images/product.jpg" style="display: none;">
+                        <div id="productImagePreview" style="margin-top: 10px;">
+                            <img id="productImagePreviewImg" class="logo-preview" src="" alt="Предварительный просмотр" style="display: none;">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="productBrand">Бренд:</label>
@@ -547,6 +567,8 @@
                         document.getElementById('adminPanel').style.display = 'block';
                         document.getElementById('userInfo').textContent = `Пользователь: ${user.username} (${user.role})`;
                         loadCatalogData();
+                        loadBrandImages();
+                        loadProductImages();
                     } else {
                         logout();
                     }
@@ -556,7 +578,201 @@
             } else {
                 loadCatalogData();
             }
+
+            // Event listeners for image upload
+            document.getElementById('brandImageUpload').addEventListener('change', handleBrandImageUpload);
+            document.getElementById('productImageUpload').addEventListener('change', handleProductImageUpload);
+            
+            // Event listeners for image select
+            document.getElementById('brandImageSelect').addEventListener('change', handleBrandImageSelect);
+            document.getElementById('productImageSelect').addEventListener('change', handleProductImageSelect);
         });
+
+        // Load brand images from server
+        async function loadBrandImages() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/brand-images`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки изображений брендов');
+                }
+                
+                const result = await response.json();
+                const select = document.getElementById('brandImageSelect');
+                select.innerHTML = '<option value="">Выберите изображение из списка</option>';
+                
+                result.images.forEach(imageUrl => {
+                    const option = document.createElement('option');
+                    option.value = imageUrl;
+                    option.textContent = imageUrl.split('/').pop();
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading brand images:', error);
+                showAlert('Ошибка загрузки изображений брендов', 'error', 'brands');
+            }
+        }
+
+        // Load product images from server
+        async function loadProductImages() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/product-images`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки изображений продуктов');
+                }
+                
+                const result = await response.json();
+                const select = document.getElementById('productImageSelect');
+                select.innerHTML = '<option value="">Выберите изображение из списка</option>';
+                
+                result.images.forEach(imageUrl => {
+                    const option = document.createElement('option');
+                    option.value = imageUrl;
+                    option.textContent = imageUrl.split('/').pop();
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading product images:', error);
+                showAlert('Ошибка загрузки изображений продуктов', 'error', 'products');
+            }
+        }
+
+        // Handle brand image upload
+        async function handleBrandImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/upload-brand-image`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки изображения');
+                }
+                
+                const result = await response.json();
+                document.getElementById('brandImage').value = result.imageUrl;
+                document.getElementById('brandImageSelect').value = result.imageUrl;
+                showBrandImagePreview(result.imageUrl);
+                loadBrandImages(); // Refresh images list
+                showAlert('Изображение бренда загружено успешно', 'success', 'brands');
+            } catch (error) {
+                console.error('Error uploading brand image:', error);
+                showAlert('Ошибка загрузки изображения бренда', 'error', 'brands');
+            }
+        }
+
+        // Handle product image upload
+        async function handleProductImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/upload-product-image`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки изображения');
+                }
+                
+                const result = await response.json();
+                document.getElementById('productImage').value = result.imageUrl;
+                document.getElementById('productImageSelect').value = result.imageUrl;
+                showProductImagePreview(result.imageUrl);
+                loadProductImages(); // Refresh images list
+                showAlert('Изображение продукта загружено успешно', 'success', 'products');
+            } catch (error) {
+                console.error('Error uploading product image:', error);
+                showAlert('Ошибка загрузки изображения продукта', 'error', 'products');
+            }
+        }
+
+        // Handle brand image select from dropdown
+        function handleBrandImageSelect(event) {
+            const imageUrl = event.target.value;
+            document.getElementById('brandImage').value = imageUrl;
+            showBrandImagePreview(imageUrl);
+        }
+
+        // Handle product image select from dropdown
+        function handleProductImageSelect(event) {
+            const imageUrl = event.target.value;
+            document.getElementById('productImage').value = imageUrl;
+            showProductImagePreview(imageUrl);
+        }
+
+        // Show brand image preview
+        function showBrandImagePreview(imageUrl) {
+            const previewImg = document.getElementById('brandImagePreviewImg');
+            const previewDiv = document.getElementById('brandImagePreview');
+            
+            if (imageUrl) {
+                previewImg.src = imageUrl;
+                previewImg.style.display = 'block';
+                previewDiv.style.display = 'block';
+            } else {
+                previewImg.src = '';
+                previewImg.style.display = 'none';
+                previewDiv.style.display = 'none';
+            }
+        }
+
+        // Show product image preview
+        function showProductImagePreview(imageUrl) {
+            const previewImg = document.getElementById('productImagePreviewImg');
+            const previewDiv = document.getElementById('productImagePreview');
+            
+            if (imageUrl) {
+                previewImg.src = imageUrl;
+                previewImg.style.display = 'block';
+                previewDiv.style.display = 'block';
+            } else {
+                previewImg.src = '';
+                previewImg.style.display = 'none';
+                previewDiv.style.display = 'none';
+            }
+        }
 
         // Validate JWT token
         async function validateToken() {
@@ -719,6 +935,8 @@
                 document.getElementById('brandTitle').value = editingBrand.title;
                 document.getElementById('brandDescription').value = editingBrand.description;
                 document.getElementById('brandImage').value = editingBrand.image;
+                document.getElementById('brandImageSelect').value = editingBrand.image || '';
+                showBrandImagePreview(editingBrand.image);
             }
         }
 
@@ -741,6 +959,9 @@
         function resetBrandForm() {
             editingBrand = null;
             document.getElementById('brandForm').reset();
+            document.getElementById('brandImage').value = '';
+            document.getElementById('brandImageSelect').value = '';
+            showBrandImagePreview('');
         }
 
         document.getElementById('brandForm').addEventListener('submit', function(e) {
@@ -820,8 +1041,10 @@
                 document.getElementById('productTitle').value = editingProduct.title;
                 document.getElementById('productDescription').value = editingProduct.description;
                 document.getElementById('productImage').value = editingProduct.image;
+                document.getElementById('productImageSelect').value = editingProduct.image || '';
                 document.getElementById('productBrand').value = editingProduct.brandId;
                 document.getElementById('productCtaTitle').value = editingProduct.ctaTitle;
+                showProductImagePreview(editingProduct.image);
                 
                 // Render specs
                 renderSpecs(editingProduct.specs || []);
@@ -840,6 +1063,9 @@
         function resetProductForm() {
             editingProduct = null;
             document.getElementById('productForm').reset();
+            document.getElementById('productImage').value = '';
+            document.getElementById('productImageSelect').value = '';
+            showProductImagePreview('');
             renderSpecs([]);
         }
 
