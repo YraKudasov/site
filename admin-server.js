@@ -202,29 +202,31 @@ const server = http.createServer((req, res) => {
             req.on('end', () => {
                 try {
                     // Parse multipart form data
-                    const boundary = req.headers['content-type'].split('boundary=')[1];
+                    const contentType = req.headers['content-type'];
+                    const boundary = contentType.split('boundary=')[1];
                     const bodyBuffer = Buffer.concat(body);
-                    const parts = bodyBuffer.toString().split(`--${boundary}`);
                     
+                    // Find start and end of file data
+                    const boundaryStart = Buffer.from(`--${boundary}`);
+                    const boundaryEnd = Buffer.from(`--${boundary}--`);
+                    
+                    let fileStart = -1;
+                    let fileEnd = -1;
                     let fileName = '';
-                    let fileData = Buffer.alloc(0);
                     
-                    parts.forEach(part => {
-                        if (part.includes('Content-Disposition: form-data')) {
-                            // Extract filename
-                            const fileNameMatch = part.match(/filename="([^"]+)"/);
-                            if (fileNameMatch) {
-                                fileName = fileNameMatch[1];
-                                // Extract file data
-                                const fileDataMatch = part.match(/(\r\n\r\n)([\s\S]*)(\r\n--)$/);
-                                if (fileDataMatch) {
-                                    fileData = Buffer.from(fileDataMatch[2], 'binary');
-                                }
-                            }
+                    // Find file start and filename
+                    const bodyStr = bodyBuffer.toString('utf8');
+                    const filenameMatch = bodyStr.match(/filename="([^"]+)"/);
+                    if (filenameMatch) {
+                        fileName = filenameMatch[1];
+                        const contentDispositionEnd = bodyStr.indexOf('\r\n\r\n');
+                        if (contentDispositionEnd !== -1) {
+                            fileStart = contentDispositionEnd + 4;
+                            fileEnd = bodyBuffer.length - boundaryEnd.length - 2; // Subtract boundary and closing --
                         }
-                    });
+                    }
                     
-                    if (!fileName || fileData.length === 0) {
+                    if (!fileName || fileStart === -1) {
                         sendJSONResponse(res, 400, { success: false, message: 'No file data' });
                         return;
                     }
@@ -242,7 +244,8 @@ const server = http.createServer((req, res) => {
                     const uniqueFileName = `${timestamp}${fileExt}`;
                     const savePath = path.join(__dirname, 'images', 'brands', uniqueFileName);
                     
-                    // Save file
+                    // Extract and save file data
+                    const fileData = bodyBuffer.slice(fileStart, fileEnd);
                     fs.writeFileSync(savePath, fileData);
                     
                     sendJSONResponse(res, 200, { 
@@ -268,29 +271,31 @@ const server = http.createServer((req, res) => {
             req.on('end', () => {
                 try {
                     // Parse multipart form data
-                    const boundary = req.headers['content-type'].split('boundary=')[1];
+                    const contentType = req.headers['content-type'];
+                    const boundary = contentType.split('boundary=')[1];
                     const bodyBuffer = Buffer.concat(body);
-                    const parts = bodyBuffer.toString().split(`--${boundary}`);
                     
+                    // Find start and end of file data
+                    const boundaryStart = Buffer.from(`--${boundary}`);
+                    const boundaryEnd = Buffer.from(`--${boundary}--`);
+                    
+                    let fileStart = -1;
+                    let fileEnd = -1;
                     let fileName = '';
-                    let fileData = Buffer.alloc(0);
                     
-                    parts.forEach(part => {
-                        if (part.includes('Content-Disposition: form-data')) {
-                            // Extract filename
-                            const fileNameMatch = part.match(/filename="([^"]+)"/);
-                            if (fileNameMatch) {
-                                fileName = fileNameMatch[1];
-                                // Extract file data
-                                const fileDataMatch = part.match(/(\r\n\r\n)([\s\S]*)(\r\n--)$/);
-                                if (fileDataMatch) {
-                                    fileData = Buffer.from(fileDataMatch[2], 'binary');
-                                }
-                            }
+                    // Find file start and filename
+                    const bodyStr = bodyBuffer.toString('utf8');
+                    const filenameMatch = bodyStr.match(/filename="([^"]+)"/);
+                    if (filenameMatch) {
+                        fileName = filenameMatch[1];
+                        const contentDispositionEnd = bodyStr.indexOf('\r\n\r\n');
+                        if (contentDispositionEnd !== -1) {
+                            fileStart = contentDispositionEnd + 4;
+                            fileEnd = bodyBuffer.length - boundaryEnd.length - 2; // Subtract boundary and closing --
                         }
-                    });
+                    }
                     
-                    if (!fileName || fileData.length === 0) {
+                    if (!fileName || fileStart === -1) {
                         sendJSONResponse(res, 400, { success: false, message: 'No file data' });
                         return;
                     }
@@ -308,7 +313,8 @@ const server = http.createServer((req, res) => {
                     const uniqueFileName = `${timestamp}${fileExt}`;
                     const savePath = path.join(__dirname, 'images', 'products', uniqueFileName);
                     
-                    // Save file
+                    // Extract and save file data
+                    const fileData = bodyBuffer.slice(fileStart, fileEnd);
                     fs.writeFileSync(savePath, fileData);
                     
                     sendJSONResponse(res, 200, { 
