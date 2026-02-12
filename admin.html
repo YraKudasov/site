@@ -491,6 +491,30 @@
                         <label for="productCtaTitle">Заголовок CTA:</label>
                         <input type="text" id="productCtaTitle" placeholder="Подробнее о продукте">
                     </div>
+                    <div class="form-group">
+                        <label for="productDocumentation">Документация продукта (PDF):</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <select id="productDocumentationSelect" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                <option value="">Выберите документацию из списка</option>
+                            </select>
+                            <input type="file" id="productDocumentationUpload" accept="application/pdf" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('productDocumentationUpload').click()">Загрузить новую</button>
+                            <button type="button" class="btn btn-danger" id="deleteProductDocumentationBtn" onclick="deleteProductDocumentation()" style="display: none;">Удалить</button>
+                        </div>
+                        <input type="text" id="productDocumentation" placeholder="/documents/document.pdf" style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label for="productPoster">Плакат продукта (PDF):</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <select id="productPosterSelect" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                                <option value="">Выберите плакат из списка</option>
+                            </select>
+                            <input type="file" id="productPosterUpload" accept="application/pdf" style="display: none;">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('productPosterUpload').click()">Загрузить новый</button>
+                            <button type="button" class="btn btn-danger" id="deleteProductPosterBtn" onclick="deleteProductPoster()" style="display: none;">Удалить</button>
+                        </div>
+                        <input type="text" id="productPoster" placeholder="/posters/poster.pdf" style="display: none;">
+                    </div>
                     
                     <div class="specs-manager">
                         <h4>Характеристики продукта</h4>
@@ -571,6 +595,8 @@
                         loadCatalogData();
                         loadBrandImages();
                         loadProductImages();
+                        loadDocuments();
+                        loadPosters();
                         restoreActiveSection();
                     } else {
                         logout();
@@ -589,7 +615,262 @@
             // Event listeners for image select
             document.getElementById('brandImageSelect').addEventListener('change', handleBrandImageSelect);
             document.getElementById('productImageSelect').addEventListener('change', handleProductImageSelect);
+            
+            // Event listeners for document and poster upload
+            document.getElementById('productDocumentationUpload').addEventListener('change', handleProductDocumentationUpload);
+            document.getElementById('productPosterUpload').addEventListener('change', handleProductPosterUpload);
+            
+            // Event listeners for document and poster select
+            document.getElementById('productDocumentationSelect').addEventListener('change', handleProductDocumentationSelect);
+            document.getElementById('productPosterSelect').addEventListener('change', handleProductPosterSelect);
         });
+
+        // Load documents from server
+        async function loadDocuments() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/documents`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки документов');
+                }
+                
+                const result = await response.json();
+                const select = document.getElementById('productDocumentationSelect');
+                select.innerHTML = '<option value="">Выберите документацию из списка</option>';
+                
+                result.documents.forEach(documentUrl => {
+                    const option = document.createElement('option');
+                    option.value = documentUrl;
+                    option.textContent = documentUrl.split('/').pop();
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading documents:', error);
+                showAlert('Ошибка загрузки документов', 'error', 'products');
+            }
+        }
+
+        // Load posters from server
+        async function loadPosters() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/posters`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки плакатов');
+                }
+                
+                const result = await response.json();
+                const select = document.getElementById('productPosterSelect');
+                select.innerHTML = '<option value="">Выберите плакат из списка</option>';
+                
+                result.posters.forEach(posterUrl => {
+                    const option = document.createElement('option');
+                    option.value = posterUrl;
+                    option.textContent = posterUrl.split('/').pop();
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading posters:', error);
+                showAlert('Ошибка загрузки плакатов', 'error', 'products');
+            }
+        }
+
+        // Handle product documentation upload
+        async function handleProductDocumentationUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('document', file);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/upload-document`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки документа');
+                }
+                
+                const result = await response.json();
+                document.getElementById('productDocumentation').value = result.documentUrl;
+                document.getElementById('productDocumentationSelect').value = result.documentUrl;
+                showDeleteButton('documentation');
+                loadDocuments();
+                showAlert('Документация загружена успешно', 'success', 'products');
+            } catch (error) {
+                console.error('Error uploading product documentation:', error);
+                showAlert('Ошибка загрузки документа', 'error', 'products');
+            }
+        }
+
+        // Handle product poster upload
+        async function handleProductPosterUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('poster', file);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/upload-poster`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Ошибка загрузки плаката');
+                }
+                
+                const result = await response.json();
+                document.getElementById('productPoster').value = result.posterUrl;
+                document.getElementById('productPosterSelect').value = result.posterUrl;
+                showDeleteButton('poster');
+                loadPosters();
+                showAlert('Плакат загружен успешно', 'success', 'products');
+            } catch (error) {
+                console.error('Error uploading product poster:', error);
+                showAlert('Ошибка загрузки плаката', 'error', 'products');
+            }
+        }
+
+        // Handle product documentation select from dropdown
+        function handleProductDocumentationSelect(event) {
+            const documentUrl = event.target.value;
+            document.getElementById('productDocumentation').value = documentUrl;
+            showDeleteButton('documentation');
+        }
+
+        // Handle product poster select from dropdown
+        function handleProductPosterSelect(event) {
+            const posterUrl = event.target.value;
+            document.getElementById('productPoster').value = posterUrl;
+            showDeleteButton('poster');
+        }
+
+        // Delete product documentation
+        async function deleteProductDocumentation() {
+            const documentUrl = document.getElementById('productDocumentation').value;
+            if (!documentUrl) {
+                showAlert('Выберите документацию для удаления', 'error', 'products');
+                return;
+            }
+
+            if (!confirm('Вы уверены, что хотите удалить эту документацию?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/delete-document?document=${encodeURIComponent(documentUrl)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('productDocumentation').value = '';
+                    document.getElementById('productDocumentationSelect').value = '';
+                    loadDocuments();
+                    showAlert('Документация удалена успешно', 'success', 'products');
+                } else {
+                    showAlert('Ошибка удаления документации: ' + (result.message || 'Неизвестная ошибка'), 'error', 'products');
+                }
+            } catch (error) {
+                console.error('Error deleting product documentation:', error);
+                showAlert('Ошибка удаления документации', 'error', 'products');
+            }
+        }
+
+        // Delete product poster
+        async function deleteProductPoster() {
+            const posterUrl = document.getElementById('productPoster').value;
+            if (!posterUrl) {
+                showAlert('Выберите плакат для удаления', 'error', 'products');
+                return;
+            }
+
+            if (!confirm('Вы уверены, что хотите удалить этот плакат?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/delete-poster?poster=${encodeURIComponent(posterUrl)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('productPoster').value = '';
+                    document.getElementById('productPosterSelect').value = '';
+                    loadPosters();
+                    showAlert('Плакат удален успешно', 'success', 'products');
+                } else {
+                    showAlert('Ошибка удаления плаката: ' + (result.message || 'Неизвестная ошибка'), 'error', 'products');
+                }
+            } catch (error) {
+                console.error('Error deleting product poster:', error);
+                showAlert('Ошибка удаления плаката', 'error', 'products');
+            }
+        }
+
+        // Show delete button for documentation and posters
+        function showDeleteButton(type) {
+            let deleteBtnId, selectId;
+            if (type === 'brand') {
+                deleteBtnId = 'deleteBrandImageBtn';
+                selectId = 'brandImageSelect';
+            } else if (type === 'product') {
+                deleteBtnId = 'deleteProductImageBtn';
+                selectId = 'productImageSelect';
+            } else if (type === 'documentation') {
+                deleteBtnId = 'deleteProductDocumentationBtn';
+                selectId = 'productDocumentationSelect';
+            } else if (type === 'poster') {
+                deleteBtnId = 'deleteProductPosterBtn';
+                selectId = 'productPosterSelect';
+            }
+            
+            const deleteBtn = document.getElementById(deleteBtnId);
+            const select = document.getElementById(selectId);
+            
+            deleteBtn.style.display = select.value ? 'block' : 'none';
+        }
 
         // Load brand images from server
         async function loadBrandImages() {
@@ -1130,7 +1411,13 @@
                 document.getElementById('productImageSelect').value = editingProduct.image || '';
                 document.getElementById('productBrand').value = editingProduct.brandId;
                 document.getElementById('productCtaTitle').value = editingProduct.ctaTitle;
+                document.getElementById('productDocumentation').value = editingProduct.documentation || '';
+                document.getElementById('productDocumentationSelect').value = editingProduct.documentation || '';
+                document.getElementById('productPoster').value = editingProduct.poster || '';
+                document.getElementById('productPosterSelect').value = editingProduct.poster || '';
                 showProductImagePreview(editingProduct.image);
+                showDeleteButton('documentation');
+                showDeleteButton('poster');
                 
                 // Render specs
                 renderSpecs(editingProduct.specs || []);
@@ -1151,6 +1438,10 @@
             document.getElementById('productForm').reset();
             document.getElementById('productImage').value = '';
             document.getElementById('productImageSelect').value = '';
+            document.getElementById('productDocumentation').value = '';
+            document.getElementById('productDocumentationSelect').value = '';
+            document.getElementById('productPoster').value = '';
+            document.getElementById('productPosterSelect').value = '';
             showProductImagePreview('');
             renderSpecs([]);
         }
@@ -1226,7 +1517,9 @@
                 image: document.getElementById('productImage').value.trim(),
                 brandId: document.getElementById('productBrand').value,
                 ctaTitle: document.getElementById('productCtaTitle').value.trim(),
-                specs: specs
+                specs: specs,
+                documentation: document.getElementById('productDocumentation').value.trim(),
+                poster: document.getElementById('productPoster').value.trim()
             };
             
             // Validate
@@ -1417,16 +1710,6 @@
             }
         }
 
-        // Show delete button when image is selected
-        function showDeleteButton(imageType) {
-            const deleteBtnId = imageType === 'brand' ? 'deleteBrandImageBtn' : 'deleteProductImageBtn';
-            const imageSelectId = imageType === 'brand' ? 'brandImageSelect' : 'productImageSelect';
-            const deleteBtn = document.getElementById(deleteBtnId);
-            const imageSelect = document.getElementById(imageSelectId);
-            
-            deleteBtn.style.display = imageSelect.value ? 'block' : 'none';
-        }
-
         // Update event listeners for image select to show delete button
         document.getElementById('brandImageSelect').addEventListener('change', function(e) {
             const imageUrl = e.target.value;
@@ -1440,6 +1723,19 @@
             document.getElementById('productImage').value = imageUrl;
             showProductImagePreview(imageUrl);
             showDeleteButton('product');
+        });
+
+        // Update event listeners for document and poster select to show delete button
+        document.getElementById('productDocumentationSelect').addEventListener('change', function(e) {
+            const documentUrl = e.target.value;
+            document.getElementById('productDocumentation').value = documentUrl;
+            showDeleteButton('documentation');
+        });
+
+        document.getElementById('productPosterSelect').addEventListener('change', function(e) {
+            const posterUrl = e.target.value;
+            document.getElementById('productPoster').value = posterUrl;
+            showDeleteButton('poster');
         });
     </script>
 </body>

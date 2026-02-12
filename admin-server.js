@@ -143,22 +143,33 @@ function verifyToken(req, res, next) {
     }
 }
 
-// Helper function to get image files from directory
-function getImagesFromDirectory(dirPath) {
+// Helper function to get files from directory
+function getFilesFromDirectory(dirPath, validExtensions) {
     try {
         if (!fs.existsSync(dirPath)) {
             fs.mkdirSync(dirPath, { recursive: true });
             return [];
         }
         const files = fs.readdirSync(dirPath);
-        const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
         return files.filter(file => 
-            imageExtensions.includes(path.extname(file).toLowerCase())
-        ).map(file => `/images/${path.basename(dirPath)}/${file}`);
+            validExtensions.includes(path.extname(file).toLowerCase())
+        ).map(file => `/${path.basename(dirPath)}/${file}`);
     } catch (error) {
-        console.error('Error reading images directory:', error);
+        console.error('Error reading directory:', error);
         return [];
     }
+}
+
+// Helper function to get image files from directory
+function getImagesFromDirectory(dirPath) {
+    const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
+    return getFilesFromDirectory(dirPath, imageExtensions);
+}
+
+// Helper function to get PDF files from directory
+function getPDFFilesFromDirectory(dirPath) {
+    const pdfExtensions = ['.pdf'];
+    return getFilesFromDirectory(dirPath, pdfExtensions);
 }
 
 // Create HTTP server
@@ -395,6 +406,244 @@ const server = http.createServer((req, res) => {
             } catch (error) {
                 console.error('Error deleting product image:', error);
                 sendJSONResponse(res, 500, { success: false, message: 'Error deleting image' });
+            }
+        });
+        return;
+    }
+
+    // Get documents list (requires authentication)
+    if (req.url === '/api/documents' && req.method === 'GET') {
+        verifyToken(req, res, () => {
+            const documents = getPDFFilesFromDirectory(path.join(__dirname, 'documents'));
+            sendJSONResponse(res, 200, { success: true, documents });
+        });
+        return;
+    }
+
+    // Get posters list (requires authentication)
+    if (req.url === '/api/posters' && req.method === 'GET') {
+        verifyToken(req, res, () => {
+            const posters = getPDFFilesFromDirectory(path.join(__dirname, 'posters'));
+            sendJSONResponse(res, 200, { success: true, posters });
+        });
+        return;
+    }
+
+    // Upload document (requires authentication)
+    if (req.url === '/api/upload-document' && req.method === 'POST') {
+        verifyToken(req, res, () => {
+            let body = [];
+            req.on('data', chunk => {
+                body.push(chunk);
+            });
+            req.on('end', () => {
+                try {
+                    // Parse multipart form data
+                    const contentType = req.headers['content-type'];
+                    const boundary = contentType.split('boundary=')[1];
+                    const bodyBuffer = Buffer.concat(body);
+                    
+                    // Find start and end of file data
+                    const boundaryStart = Buffer.from(`--${boundary}`);
+                    const boundaryEnd = Buffer.from(`--${boundary}--`);
+                    
+                    let fileStart = -1;
+                    let fileEnd = -1;
+                    let fileName = '';
+                    
+                    // Find file start and filename
+                    const bodyStr = bodyBuffer.toString('utf8');
+                    const filenameMatch = bodyStr.match(/filename="([^"]+)"/);
+                    if (filenameMatch) {
+                        fileName = filenameMatch[1];
+                        const contentDispositionEnd = bodyStr.indexOf('\r\n\r\n');
+                        if (contentDispositionEnd !== -1) {
+                            fileStart = contentDispositionEnd + 4;
+                            fileEnd = bodyBuffer.length - boundaryEnd.length - 2; // Subtract boundary and closing --
+                        }
+                    }
+                    
+                    if (!fileName || fileStart === -1) {
+                        sendJSONResponse(res, 400, { success: false, message: 'No file data' });
+                        return;
+                    }
+                    
+                    // Validate file extension
+                    const validExtensions = ['.pdf'];
+                    const fileExt = path.extname(fileName).toLowerCase();
+                    if (!validExtensions.includes(fileExt)) {
+                        sendJSONResponse(res, 400, { success: false, message: 'Invalid file type. Only PDF files are allowed.' });
+                        return;
+                    }
+                    
+                    // Preserve original filename (with safety checks for collisions)
+                    let originalFileName = path.basename(fileName, fileExt);
+                    let uniqueFileName = fileName;
+                    let counter = 1;
+                    while (fs.existsSync(path.join(__dirname, 'documents', uniqueFileName))) {
+                        uniqueFileName = `${originalFileName}_${counter}${fileExt}`;
+                        counter++;
+                    }
+                    
+                    const savePath = path.join(__dirname, 'documents', uniqueFileName);
+                    
+                    // Extract and save file data
+                    const fileData = bodyBuffer.slice(fileStart, fileEnd);
+                    fs.writeFileSync(savePath, fileData);
+                    
+                    sendJSONResponse(res, 200, { 
+                        success: true, 
+                        documentUrl: `/documents/${uniqueFileName}` 
+                    });
+                } catch (error) {
+                    console.error('Error uploading document:', error);
+                    sendJSONResponse(res, 500, { success: false, message: 'Error uploading document' });
+                }
+            });
+        });
+        return;
+    }
+
+    // Upload poster (requires authentication)
+    if (req.url === '/api/upload-poster' && req.method === 'POST') {
+        verifyToken(req, res, () => {
+            let body = [];
+            req.on('data', chunk => {
+                body.push(chunk);
+            });
+            req.on('end', () => {
+                try {
+                    // Parse multipart form data
+                    const contentType = req.headers['content-type'];
+                    const boundary = contentType.split('boundary=')[1];
+                    const bodyBuffer = Buffer.concat(body);
+                    
+                    // Find start and end of file data
+                    const boundaryStart = Buffer.from(`--${boundary}`);
+                    const boundaryEnd = Buffer.from(`--${boundary}--`);
+                    
+                    let fileStart = -1;
+                    let fileEnd = -1;
+                    let fileName = '';
+                    
+                    // Find file start and filename
+                    const bodyStr = bodyBuffer.toString('utf8');
+                    const filenameMatch = bodyStr.match(/filename="([^"]+)"/);
+                    if (filenameMatch) {
+                        fileName = filenameMatch[1];
+                        const contentDispositionEnd = bodyStr.indexOf('\r\n\r\n');
+                        if (contentDispositionEnd !== -1) {
+                            fileStart = contentDispositionEnd + 4;
+                            fileEnd = bodyBuffer.length - boundaryEnd.length - 2; // Subtract boundary and closing --
+                        }
+                    }
+                    
+                    if (!fileName || fileStart === -1) {
+                        sendJSONResponse(res, 400, { success: false, message: 'No file data' });
+                        return;
+                    }
+                    
+                    // Validate file extension
+                    const validExtensions = ['.pdf'];
+                    const fileExt = path.extname(fileName).toLowerCase();
+                    if (!validExtensions.includes(fileExt)) {
+                        sendJSONResponse(res, 400, { success: false, message: 'Invalid file type. Only PDF files are allowed.' });
+                        return;
+                    }
+                    
+                    // Preserve original filename (with safety checks for collisions)
+                    let originalFileName = path.basename(fileName, fileExt);
+                    let uniqueFileName = fileName;
+                    let counter = 1;
+                    while (fs.existsSync(path.join(__dirname, 'posters', uniqueFileName))) {
+                        uniqueFileName = `${originalFileName}_${counter}${fileExt}`;
+                        counter++;
+                    }
+                    
+                    const savePath = path.join(__dirname, 'posters', uniqueFileName);
+                    
+                    // Extract and save file data
+                    const fileData = bodyBuffer.slice(fileStart, fileEnd);
+                    fs.writeFileSync(savePath, fileData);
+                    
+                    sendJSONResponse(res, 200, { 
+                        success: true, 
+                        posterUrl: `/posters/${uniqueFileName}` 
+                    });
+                } catch (error) {
+                    console.error('Error uploading poster:', error);
+                    sendJSONResponse(res, 500, { success: false, message: 'Error uploading poster' });
+                }
+            });
+        });
+        return;
+    }
+
+    // Delete document (requires authentication)
+    if (req.url.startsWith('/api/delete-document') && req.method === 'DELETE') {
+        verifyToken(req, res, () => {
+            try {
+                const urlParams = new URLSearchParams(req.url.split('?')[1]);
+                const documentUrl = urlParams.get('document');
+                
+                if (!documentUrl) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Document URL is required' });
+                    return;
+                }
+                
+                // Validate document URL (only allow documents from documents directory)
+                if (!documentUrl.startsWith('/documents/')) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Invalid document URL' });
+                    return;
+                }
+                
+                const fileName = path.basename(documentUrl);
+                const documentPath = path.join(__dirname, 'documents', fileName);
+                
+                if (fs.existsSync(documentPath)) {
+                    fs.unlinkSync(documentPath);
+                    sendJSONResponse(res, 200, { success: true, message: 'Document deleted successfully' });
+                } else {
+                    sendJSONResponse(res, 404, { success: false, message: 'Document not found' });
+                }
+            } catch (error) {
+                console.error('Error deleting document:', error);
+                sendJSONResponse(res, 500, { success: false, message: 'Error deleting document' });
+            }
+        });
+        return;
+    }
+
+    // Delete poster (requires authentication)
+    if (req.url.startsWith('/api/delete-poster') && req.method === 'DELETE') {
+        verifyToken(req, res, () => {
+            try {
+                const urlParams = new URLSearchParams(req.url.split('?')[1]);
+                const posterUrl = urlParams.get('poster');
+                
+                if (!posterUrl) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Poster URL is required' });
+                    return;
+                }
+                
+                // Validate poster URL (only allow posters from posters directory)
+                if (!posterUrl.startsWith('/posters/')) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Invalid poster URL' });
+                    return;
+                }
+                
+                const fileName = path.basename(posterUrl);
+                const posterPath = path.join(__dirname, 'posters', fileName);
+                
+                if (fs.existsSync(posterPath)) {
+                    fs.unlinkSync(posterPath);
+                    sendJSONResponse(res, 200, { success: true, message: 'Poster deleted successfully' });
+                } else {
+                    sendJSONResponse(res, 404, { success: false, message: 'Poster not found' });
+                }
+            } catch (error) {
+                console.error('Error deleting poster:', error);
+                sendJSONResponse(res, 500, { success: false, message: 'Error deleting poster' });
             }
         });
         return;

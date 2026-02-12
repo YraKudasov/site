@@ -220,6 +220,28 @@ class UIUtils {
             specRow.appendChild(specValue);
             specsTable.appendChild(specRow);
         });
+        
+        // Устанавливаем ссылки для скачивания документации и плаката
+        const downloadButtons = document.querySelectorAll('.btn-download');
+        if (downloadButtons.length > 0 && product.documentation) {
+            const docUrl = product.documentation.startsWith('/') ? product.documentation.slice(1) : product.documentation;
+            downloadButtons[0].href = docUrl;
+            downloadButtons[0].style.display = 'inline-flex';
+        } else {
+            if (downloadButtons.length > 0) {
+                downloadButtons[0].style.display = 'none';
+            }
+        }
+        
+        if (downloadButtons.length > 1 && product.poster) {
+            const posterUrl = product.poster.startsWith('/') ? product.poster.slice(1) : product.poster;
+            downloadButtons[1].href = posterUrl;
+            downloadButtons[1].style.display = 'inline-flex';
+        } else {
+            if (downloadButtons.length > 1) {
+                downloadButtons[1].style.display = 'none';
+            }
+        }
     }
 
     static populateBrandPage(brand) {

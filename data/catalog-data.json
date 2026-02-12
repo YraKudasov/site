@@ -89,7 +89,8 @@
           "value": "Класс А"
         }
       ],
-      "isActive": true
+      "documentation": "/documents/1770912743547.pdf",
+      "poster": "/posters/1770926940062.pdf"
     },
     {
       "id": "al45",
@@ -97,6 +98,8 @@
       "title": "AL 45",
       "description": "Классическая алюминиевая система для холодного остекления",
       "image": "/images/products/Alneo_AL_45.png",
+      "brandId": "alneo",
+      "ctaTitle": "Заказать конструкцию из системы AL 45",
       "specs": [
         {
           "name": "Монтажная ширина:",
@@ -131,16 +134,17 @@
           "value": "Класс B"
         }
       ],
-      "ctaTitle": "Заказать конструкцию из системы AL 45",
-      "isActive": true,
-      "brandId": "alneo"
+      "documentation": "/documents/1770912743547.pdf",
+      "poster": "/posters/1770926940062.pdf"
     },
     {
-      "id": "topline-5k",
+      "id": "topline5k",
       "name": "TopLine 5k",
       "title": "TopLine 5k",
       "description": "Алюминиевая система для холодного остекления",
       "image": "/images/products/Topline_5k.jpg",
+      "brandId": "topline",
+      "ctaTitle": "Заказать конструкцию из системы TopLine 5k",
       "specs": [
         {
           "name": "Монтажная ширина профиля:",
@@ -171,16 +175,17 @@
           "value": "57 мм"
         }
       ],
-      "ctaTitle": "Заказать конструкцию из системы TopLine 5k",
-      "isActive": true,
-      "brandId": "topline"
+      "documentation": "/documents/1770912743547.pdf",
+      "poster": "/posters/1770926940062.pdf"
     },
     {
-      "id": "topline-3k",
+      "id": "topline3k",
       "name": "TopLine 3k",
       "title": "TopLine 3k",
       "description": "Алюминиевая система для холодного остекления",
       "image": "/images/products/Topline_3k.jpg",
+      "brandId": "topline",
+      "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
       "specs": [
         {
           "name": "Монтажная ширина профиля:",
@@ -211,9 +216,8 @@
           "value": "57 мм"
         }
       ],
-      "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
-      "isActive": false,
-      "brandId": "topline"
+      "documentation": "/documents/1770926625086.pdf",
+      "poster": "/posters/Plakat_TopLine_A_0_Korrekt.pdf"
     },
     {
       "id": "dffdf",
@@ -223,7 +227,9 @@
       "image": "/images/products/Topline_5k.jpg",
       "brandId": "rrrrr",
       "ctaTitle": "dfdfdf",
-      "specs": []
+      "specs": [],
+      "documentation": "/documents/1770912743547.pdf",
+      "poster": ""
     }
   ],
   "settings": {}
