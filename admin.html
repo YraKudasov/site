@@ -686,6 +686,7 @@
                 document.getElementById('brandImage').value = result.imageUrl;
                 document.getElementById('brandImageSelect').value = result.imageUrl;
                 showBrandImagePreview(result.imageUrl);
+                showDeleteButton('brand'); // Show delete button
                 loadBrandImages(); // Refresh images list
                 showAlert('Изображение бренда загружено успешно', 'success', 'brands');
             } catch (error) {
@@ -723,6 +724,7 @@
                 document.getElementById('productImage').value = result.imageUrl;
                 document.getElementById('productImageSelect').value = result.imageUrl;
                 showProductImagePreview(result.imageUrl);
+                showDeleteButton('product'); // Show delete button
                 loadProductImages(); // Refresh images list
                 showAlert('Изображение продукта загружено успешно', 'success', 'products');
             } catch (error) {

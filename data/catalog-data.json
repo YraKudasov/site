@@ -43,7 +43,7 @@
       "name": "sfsfsfs",
       "title": "sfsfsf",
       "description": "sfsfsfsf",
-      "image": "/images/brands/1770908444936.jpg"
+      "image": "/images/brands/1770911228133.jpg"
     }
   ],
   "products": [
@@ -217,14 +217,13 @@
     },
     {
       "id": "dffdf",
-      "name": "dfdfd",
+      "name": "dfdfd5656",
       "title": "dfdfd",
       "description": "dfdfdf",
-      "image": "",
+      "image": "/images/products/Topline_5k.jpg",
       "brandId": "rrrrr",
       "ctaTitle": "dfdfdf",
-      "specs": [],
-      "isActive": true
+      "specs": []
     }
   ],
   "settings": {}

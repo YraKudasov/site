@@ -165,7 +165,7 @@ function getImagesFromDirectory(dirPath) {
 const server = http.createServer((req, res) => {
     // Enable CORS for all routes
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
@@ -342,6 +342,12 @@ const server = http.createServer((req, res) => {
                     return;
                 }
                 
+                // Validate image URL (only allow images from brands directory)
+                if (!imageUrl.startsWith('/images/brands/')) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Invalid image URL' });
+                    return;
+                }
+                
                 const fileName = path.basename(imageUrl);
                 const imagePath = path.join(__dirname, 'images', 'brands', fileName);
                 
@@ -368,6 +374,12 @@ const server = http.createServer((req, res) => {
                 
                 if (!imageUrl) {
                     sendJSONResponse(res, 400, { success: false, message: 'Image URL is required' });
+                    return;
+                }
+                
+                // Validate image URL (only allow images from products directory)
+                if (!imageUrl.startsWith('/images/products/')) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Invalid image URL' });
                     return;
                 }
                 
