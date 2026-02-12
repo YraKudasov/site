@@ -330,6 +330,64 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    // Delete brand image (requires authentication)
+    if (req.url.startsWith('/api/delete-brand-image') && req.method === 'DELETE') {
+        verifyToken(req, res, () => {
+            try {
+                const urlParams = new URLSearchParams(req.url.split('?')[1]);
+                const imageUrl = urlParams.get('image');
+                
+                if (!imageUrl) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Image URL is required' });
+                    return;
+                }
+                
+                const fileName = path.basename(imageUrl);
+                const imagePath = path.join(__dirname, 'images', 'brands', fileName);
+                
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                    sendJSONResponse(res, 200, { success: true, message: 'Image deleted successfully' });
+                } else {
+                    sendJSONResponse(res, 404, { success: false, message: 'Image not found' });
+                }
+            } catch (error) {
+                console.error('Error deleting brand image:', error);
+                sendJSONResponse(res, 500, { success: false, message: 'Error deleting image' });
+            }
+        });
+        return;
+    }
+
+    // Delete product image (requires authentication)
+    if (req.url.startsWith('/api/delete-product-image') && req.method === 'DELETE') {
+        verifyToken(req, res, () => {
+            try {
+                const urlParams = new URLSearchParams(req.url.split('?')[1]);
+                const imageUrl = urlParams.get('image');
+                
+                if (!imageUrl) {
+                    sendJSONResponse(res, 400, { success: false, message: 'Image URL is required' });
+                    return;
+                }
+                
+                const fileName = path.basename(imageUrl);
+                const imagePath = path.join(__dirname, 'images', 'products', fileName);
+                
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath);
+                    sendJSONResponse(res, 200, { success: true, message: 'Image deleted successfully' });
+                } else {
+                    sendJSONResponse(res, 404, { success: false, message: 'Image not found' });
+                }
+            } catch (error) {
+                console.error('Error deleting product image:', error);
+                sendJSONResponse(res, 500, { success: false, message: 'Error deleting image' });
+            }
+        });
+        return;
+    }
+
     // Handle login (username/password to JWT)
     if (req.url === '/api/login' && req.method === 'POST') {
         let body = '';

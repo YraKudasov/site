@@ -25,7 +25,7 @@
       "name": "rrrrr",
       "title": "rrrrrrrrr",
       "description": "rrrrrr",
-      "image": "/images/brands/Alneo_ALT_72.png"
+      "image": "/images/brands/1770759348525.png"
     },
     {
       "id": "SACAS",
@@ -37,11 +37,13 @@
   ],
   "products": [
     {
-      "id": "rrrrr-product",
+      "id": "rrrrrproduct",
       "name": "Продукт RRRRR",
       "title": "Продукт RRRRR",
       "description": "Тестовый продукт для бренда RRRRR",
-      "image": "/images/products/Alneo_AL_45.png",
+      "image": "/images/products/Alneo_ALT_72.png",
+      "brandId": "rrrrr",
+      "ctaTitle": "Заказать продукт RRRRR",
       "specs": [
         {
           "name": "Монтажная ширина:",
@@ -59,10 +61,7 @@
           "name": "Применение:",
           "value": "Холодное остекление"
         }
-      ],
-      "ctaTitle": "Заказать продукт RRRRR",
-      "isActive": true,
-      "brandId": "rrrrr"
+      ]
     },
     {
       "id": "alt72",

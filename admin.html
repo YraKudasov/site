@@ -416,6 +416,7 @@
                             </select>
                             <input type="file" id="brandImageUpload" accept="image/*" style="display: none;">
                             <button type="button" class="btn btn-secondary" onclick="document.getElementById('brandImageUpload').click()">Загрузить новое</button>
+                            <button type="button" class="btn btn-danger" id="deleteBrandImageBtn" onclick="deleteBrandImage()" style="display: none;">Удалить</button>
                         </div>
                         <input type="text" id="brandImage" placeholder="images/brand-logo.png" style="display: none;">
                         <div id="brandImagePreview" style="margin-top: 10px;">
@@ -474,6 +475,7 @@
                             </select>
                             <input type="file" id="productImageUpload" accept="image/*" style="display: none;">
                             <button type="button" class="btn btn-secondary" onclick="document.getElementById('productImageUpload').click()">Загрузить новое</button>
+                            <button type="button" class="btn btn-danger" id="deleteProductImageBtn" onclick="deleteProductImage()" style="display: none;">Удалить</button>
                         </div>
                         <input type="text" id="productImage" placeholder="images/product.jpg" style="display: none;">
                         <div id="productImagePreview" style="margin-top: 10px;">
@@ -815,6 +817,8 @@
                     document.getElementById('adminPanel').style.display = 'block';
                     document.getElementById('userInfo').textContent = `Пользователь: ${user.username} (${user.role})`;
                     loadCatalogData();
+                    loadBrandImages();
+                    loadProductImages();
                     document.getElementById('passwordError').textContent = '';
                     document.getElementById('passwordError').classList.remove('error');
                 } else {
@@ -1253,6 +1257,103 @@
             const regex = /^[a-zA-Z0-9_]+$/;
             return regex.test(id);
         }
+
+        // Delete brand image
+        async function deleteBrandImage() {
+            const imageUrl = document.getElementById('brandImage').value;
+            if (!imageUrl) {
+                showAlert('Выберите изображение для удаления', 'error', 'brands');
+                return;
+            }
+
+            if (!confirm('Вы уверены, что хотите удалить это изображение?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/delete-brand-image?image=${encodeURIComponent(imageUrl)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('brandImage').value = '';
+                    document.getElementById('brandImageSelect').value = '';
+                    showBrandImagePreview('');
+                    loadBrandImages();
+                    showAlert('Изображение бренда удалено успешно', 'success', 'brands');
+                } else {
+                    showAlert('Ошибка удаления изображения: ' + (result.message || 'Неизвестная ошибка'), 'error', 'brands');
+                }
+            } catch (error) {
+                console.error('Error deleting brand image:', error);
+                showAlert('Ошибка удаления изображения бренда', 'error', 'brands');
+            }
+        }
+
+        // Delete product image
+        async function deleteProductImage() {
+            const imageUrl = document.getElementById('productImage').value;
+            if (!imageUrl) {
+                showAlert('Выберите изображение для удаления', 'error', 'products');
+                return;
+            }
+
+            if (!confirm('Вы уверены, что хотите удалить это изображение?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/delete-product-image?image=${encodeURIComponent(imageUrl)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('productImage').value = '';
+                    document.getElementById('productImageSelect').value = '';
+                    showProductImagePreview('');
+                    loadProductImages();
+                    showAlert('Изображение продукта удалено успешно', 'success', 'products');
+                } else {
+                    showAlert('Ошибка удаления изображения: ' + (result.message || 'Неизвестная ошибка'), 'error', 'products');
+                }
+            } catch (error) {
+                console.error('Error deleting product image:', error);
+                showAlert('Ошибка удаления изображения продукта', 'error', 'products');
+            }
+        }
+
+        // Show delete button when image is selected
+        function showDeleteButton(imageType) {
+            const deleteBtnId = imageType === 'brand' ? 'deleteBrandImageBtn' : 'deleteProductImageBtn';
+            const imageSelectId = imageType === 'brand' ? 'brandImageSelect' : 'productImageSelect';
+            const deleteBtn = document.getElementById(deleteBtnId);
+            const imageSelect = document.getElementById(imageSelectId);
+            
+            deleteBtn.style.display = imageSelect.value ? 'block' : 'none';
+        }
+
+        // Update event listeners for image select to show delete button
+        document.getElementById('brandImageSelect').addEventListener('change', function(e) {
+            const imageUrl = e.target.value;
+            document.getElementById('brandImage').value = imageUrl;
+            showBrandImagePreview(imageUrl);
+            showDeleteButton('brand');
+        });
+
+        document.getElementById('productImageSelect').addEventListener('change', function(e) {
+            const imageUrl = e.target.value;
+            document.getElementById('productImage').value = imageUrl;
+            showProductImagePreview(imageUrl);
+            showDeleteButton('product');
+        });
     </script>
 </body>
 </html>
