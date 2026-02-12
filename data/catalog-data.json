@@ -5,14 +5,8 @@
       "name": "Алнео",
       "title": "Алнео",
       "description": "Алюминиевые системы Алнео",
-      "image": "/images/brands/Alneo.png"
-    },
-    {
-      "id": "topline",
-      "name": "TopLine",
-      "title": "TopLine",
-      "description": "Алюминиевые системы TopLine",
-      "image": "/images/brands/Topline.jpg"
+      "image": "/images/brands/Alneo.png",
+      "isActive": true
     },
     {
       "id": "all-systems",
@@ -21,50 +15,39 @@
       "description": "Выберите подходящую систему профилей для ваших окон и дверей"
     },
     {
+      "id": "topline",
+      "name": "TopLine",
+      "title": "TopLine",
+      "description": "Алюминиевые системы TopLine",
+      "image": "/images/brands/Topline.jpg",
+      "isActive": true
+    },
+    {
       "id": "rrrrr",
       "name": "rrrrr",
       "title": "rrrrrrrrr",
       "description": "rrrrrr",
       "image": "/images/brands/1770759348525.png",
-      "isActive": false
+      "isActive": true
     },
     {
       "id": "SACAS",
       "name": "ASDASD",
       "title": "ASDASD",
       "description": "ASDASD",
-      "image": "/images/brands/Topline_5k.jpg"
+      "image": "/images/brands/Topline_5k.jpg",
+      "isActive": true
+    },
+    {
+      "id": "sdfsdf",
+      "name": "sfsfsfs",
+      "title": "sfsfsf",
+      "description": "sfsfsfsf",
+      "image": "/images/brands/1770907517065.png",
+      "isActive": false
     }
   ],
   "products": [
-    {
-      "id": "rrrrrproduct",
-      "name": "Продукт RRRRR",
-      "title": "Продукт RRRRR",
-      "description": "Тестовый продукт для бренда RRRRR",
-      "image": "/images/products/Alneo_ALT_72.png",
-      "brandId": "rrrrr",
-      "ctaTitle": "Заказать продукт RRRRR",
-      "specs": [
-        {
-          "name": "Монтажная ширина:",
-          "value": "50 мм"
-        },
-        {
-          "name": "Количество камер:",
-          "value": "2"
-        },
-        {
-          "name": "Терморазрыв:",
-          "value": "Нет"
-        },
-        {
-          "name": "Применение:",
-          "value": "Холодное остекление"
-        }
-      ],
-      "isActive": false
-    },
     {
       "id": "alt72",
       "name": "ALT 72",
@@ -107,7 +90,7 @@
           "value": "Класс А"
         }
       ],
-      "isActive": false
+      "isActive": true
     },
     {
       "id": "al45",
@@ -230,8 +213,19 @@
         }
       ],
       "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
-      "isActive": true,
+      "isActive": false,
       "brandId": "topline"
+    },
+    {
+      "id": "dffdf",
+      "name": "dfdfd",
+      "title": "dfdfd",
+      "description": "dfdfdf",
+      "image": "",
+      "brandId": "rrrrr",
+      "ctaTitle": "dfdfdf",
+      "specs": [],
+      "isActive": true
     }
   ],
   "settings": {}

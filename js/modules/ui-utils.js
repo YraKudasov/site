@@ -79,15 +79,14 @@ class UIUtils {
     static async renderWindowSystemsSection() {
         try {
             const brands = await DataLoader.loadBrands();
-            const systemsGrid = document.querySelector('.window-systems .systems-grid');
+            const systemsGrid = document.querySelector('.window-systems .cards-grid');
             if (!systemsGrid) return;
 
             // Фильтруем только реальные бренды (не "all-systems")
             const realBrands = brands.filter(brand => brand.id !== 'all-systems');
 
-            // Удаляем существующие карточки (кроме placeholder)
-            const existingCards = systemsGrid.querySelectorAll('.system-card');
-            existingCards.forEach(card => card.remove());
+            // Удаляем существующие карточки
+            systemsGrid.innerHTML = '';
 
             realBrands.forEach(brand => {
                 const systemCard = document.createElement('div');
@@ -101,14 +100,8 @@ class UIUtils {
                         <a href="brands-catalog.html?brand=${brand.id}" class="btn-details">Подробнее</a>
                     </div>
                 `;
-                systemsGrid.insertBefore(systemCard, systemsGrid.querySelector('.system-card-placeholder'));
+                systemsGrid.appendChild(systemCard);
             });
-
-            // Если больше 2 брендов, удаляем placeholder
-            if (realBrands.length > 2) {
-                const placeholder = systemsGrid.querySelector('.system-card-placeholder');
-                if (placeholder) placeholder.remove();
-            }
 
         } catch (error) {
             console.error('Ошибка при рендеринге секции оконных систем:', error);
@@ -129,23 +122,23 @@ class UIUtils {
 
     static createProductCard(product) {
         const card = document.createElement('div');
-        card.className = 'series-item compact';
+        card.className = 'system-card';
 
         const imageContainer = document.createElement('div');
-        imageContainer.className = 'series-image';
+        imageContainer.className = 'system-image';
         const img = document.createElement('img');
         img.src = product.image;
         img.alt = product.title;
         imageContainer.appendChild(img);
 
         const infoContainer = document.createElement('div');
-        infoContainer.className = 'series-info';
+        infoContainer.className = 'system-info';
         const title = document.createElement('h3');
         title.textContent = product.title;
         const description = document.createElement('p');
         description.textContent = product.description;
         const link = document.createElement('a');
-        link.href = product.link;
+        link.href = `product-template.html?id=${product.id}`;
         link.className = 'btn-details';
         link.textContent = 'Подробнее';
 
