@@ -91,9 +91,12 @@ class UIUtils {
             realBrands.forEach(brand => {
                 const systemCard = document.createElement('div');
                 systemCard.className = 'system-card';
+                const imageSrc = brand.image && brand.image !== '' 
+                    ? brand.image.startsWith('/') ? brand.image.slice(1) : brand.image 
+                    : 'images/products/Alneo_ALT_72.png';
                 systemCard.innerHTML = `
                     <div class="system-image">
-                        <img src="${brand.image || 'images/Alneo_ALT_72.png'}" alt="${brand.name}">
+                        <img src="${imageSrc}" alt="${brand.name}" onerror="this.src='images/products/Alneo_ALT_72.png'">
                     </div>
                     <div class="system-info">
                         <h3>${brand.name}</h3>
@@ -127,8 +130,14 @@ class UIUtils {
         const imageContainer = document.createElement('div');
         imageContainer.className = 'system-image';
         const img = document.createElement('img');
-        img.src = product.image;
+        const imageSrc = product.image && product.image !== '' 
+            ? product.image.startsWith('/') ? product.image.slice(1) : product.image 
+            : 'images/products/Alneo_ALT_72.png';
+        img.src = imageSrc;
         img.alt = product.title;
+        img.onerror = function() {
+            this.src = 'images/products/Alneo_ALT_72.png';
+        };
         imageContainer.appendChild(img);
 
         const infoContainer = document.createElement('div');
@@ -179,8 +188,14 @@ class UIUtils {
         
         // Устанавливаем изображение продукта
         const productImage = document.getElementById('product-image');
-        productImage.src = product.image;
+        const imageSrc = product.image && product.image !== '' 
+            ? product.image.startsWith('/') ? product.image.slice(1) : product.image 
+            : 'images/products/Alneo_ALT_72.png';
+        productImage.src = imageSrc;
         productImage.alt = product.title;
+        productImage.onerror = function() {
+            this.src = 'images/products/Alneo_ALT_72.png';
+        };
         
         // Устанавливаем заголовок CTA
         document.getElementById('cta-title').textContent = product.ctaTitle;
