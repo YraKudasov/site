@@ -916,6 +916,11 @@
             tbody.innerHTML = '';
             
             catalogData.brands.forEach(brand => {
+                // Skip "all-systems" brand to prevent accidental deletion
+                if (brand.id === 'all-systems') {
+                    return;
+                }
+                
                 const row = tbody.insertRow();
                 row.innerHTML = `
                     <td>${brand.id}</td>
@@ -1112,6 +1117,11 @@
             select.innerHTML = '<option value="">Выберите бренд</option>';
             
             catalogData.brands.forEach(brand => {
+                // Skip "all-systems" brand - it's not a real product brand
+                if (brand.id === 'all-systems') {
+                    return;
+                }
+                
                 const option = document.createElement('option');
                 option.value = brand.id;
                 option.textContent = brand.name;
