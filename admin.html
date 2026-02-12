@@ -7,8 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Livereload script -->
-    <script src="http://localhost:35729/livereload.js?snipver=1"></script>
     <style>
         * {
             margin: 0;
@@ -437,6 +435,7 @@
                             <th>ID</th>
                             <th>Имя</th>
                             <th>Заголовок</th>
+                            <th>Видимость</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -512,6 +511,7 @@
                             <th>ID</th>
                             <th>Имя</th>
                             <th>Бренд</th>
+                            <th>Видимость</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -571,6 +571,7 @@
                         loadCatalogData();
                         loadBrandImages();
                         loadProductImages();
+                        restoreActiveSection();
                     } else {
                         logout();
                     }
@@ -896,6 +897,34 @@
             // Show selected section
             document.getElementById(sectionId + 'Section').classList.add('active');
             event.target.classList.add('active');
+            
+            // Save active section to localStorage
+            localStorage.setItem('activeSection', sectionId);
+        }
+
+        // Restore active section from localStorage
+        function restoreActiveSection() {
+            const savedSection = localStorage.getItem('activeSection');
+            if (savedSection && savedSection !== 'brands') {
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Remove active class from all nav buttons
+                document.querySelectorAll('.nav button').forEach(button => {
+                    button.classList.remove('active');
+                });
+                
+                // Show saved section
+                document.getElementById(savedSection + 'Section').classList.add('active');
+                const navButtons = document.querySelectorAll('.nav button');
+                navButtons.forEach(button => {
+                    if (button.textContent.toLowerCase().includes(savedSection)) {
+                        button.classList.add('active');
+                    }
+                });
+            }
         }
 
         function showAlert(message, type, section) {
@@ -926,14 +955,37 @@
                     <td>${brand.id}</td>
                     <td>${brand.name}</td>
                     <td>${brand.title}</td>
+                    <td>${brand.isActive === false ? '<span style="color: red; font-weight: bold;">Скрыт</span>' : '<span style="color: green; font-weight: bold;">Активен</span>'}</td>
                     <td>
                         <div class="action-buttons">
                             <button class="edit-btn" onclick="editBrand('${brand.id}')">Редактировать</button>
+                            <button class="${brand.isActive === false ? 'btn-success' : 'btn-secondary'}" style="padding: 6px 12px; font-size: 12px; border: none; border-radius: 4px; cursor: pointer;" onclick="toggleBrandVisibility('${brand.id}')">${brand.isActive === false ? 'Показать' : 'Скрыть'}</button>
                             <button class="delete-btn" onclick="deleteBrand('${brand.id}')">Удалить</button>
                         </div>
                     </td>
                 `;
             });
+        }
+
+        function toggleBrandVisibility(brandId) {
+            const brand = catalogData.brands.find(b => b.id === brandId);
+            if (brand) {
+                brand.isActive = brand.isActive === false ? true : false;
+                
+                // Если бренд скрыт, скрываем все его продукты
+                if (brand.isActive === false) {
+                    catalogData.products.forEach(product => {
+                        if (product.brandId === brandId) {
+                            product.isActive = false;
+                        }
+                    });
+                }
+                
+                saveCatalogData();
+                renderBrands();
+                renderProducts();
+                showAlert(`Бренд ${brand.isActive === false ? 'скрыт' : 'активирован'} успешно`, 'success', 'brands');
+            }
         }
 
         function editBrand(brandId) {
@@ -1032,14 +1084,37 @@
                     <td>${product.id}</td>
                     <td>${product.name}</td>
                     <td>${brand ? brand.name : 'Unknown'}</td>
+                    <td>${product.isActive === false ? '<span style="color: red; font-weight: bold;">Скрыт</span>' : '<span style="color: green; font-weight: bold;">Активен</span>'}</td>
                     <td>
                         <div class="action-buttons">
                             <button class="edit-btn" onclick="editProduct('${product.id}')">Редактировать</button>
+                            <button class="${product.isActive === false ? 'btn-success' : 'btn-secondary'}" style="padding: 6px 12px; font-size: 12px; border: none; border-radius: 4px; cursor: pointer;" onclick="toggleProductVisibility('${product.id}')">${product.isActive === false ? 'Показать' : 'Скрыть'}</button>
                             <button class="delete-btn" onclick="deleteProduct('${product.id}')">Удалить</button>
                         </div>
                     </td>
                 `;
             });
+        }
+
+        function toggleProductVisibility(productId) {
+            const product = catalogData.products.find(p => p.id === productId);
+            if (product) {
+                product.isActive = product.isActive === false ? true : false;
+                
+                // Если продукт активирован, проверяем, активен ли его бренд
+                if (product.isActive === true) {
+                    const brand = catalogData.brands.find(b => b.id === product.brandId);
+                    if (brand && brand.isActive === false) {
+                        showAlert('Не удалось активировать продукт: его бренд скрыт', 'error', 'products');
+                        product.isActive = false;
+                        return;
+                    }
+                }
+                
+                saveCatalogData();
+                renderProducts();
+                showAlert(`Продукт ${product.isActive === false ? 'скрыт' : 'активирован'} успешно`, 'success', 'products');
+            }
         }
 
         function editProduct(productId) {

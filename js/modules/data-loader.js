@@ -24,30 +24,41 @@ class DataLoader {
 
     static async loadProducts() {
         const catalogData = await this.loadCatalogData();
-        return catalogData.products || [];
+        return (catalogData.products || []).filter(product => product.isActive !== false);
     }
 
     static async loadBrands() {
         const catalogData = await this.loadCatalogData();
-        return catalogData.brands || [];
+        return (catalogData.brands || []).filter(brand => brand.isActive !== false);
     }
 
     static async getProductById(productId) {
-        const products = await this.loadProducts();
-        return products.find(product => product.id === productId);
+        const catalogData = await this.loadCatalogData();
+        return (catalogData.products || []).find(product => product.id === productId);
     }
 
     static async getBrandById(brandId) {
-        const brands = await this.loadBrands();
-        return brands.find(brand => brand.id === brandId);
+        const catalogData = await this.loadCatalogData();
+        return (catalogData.brands || []).find(brand => brand.id === brandId);
     }
 
     static async getProductsByBrand(brandId) {
-        const products = await this.loadProducts();
+        const catalogData = await this.loadCatalogData();
+        const allProducts = catalogData.products || [];
+        
         if (brandId === 'all-systems') {
-            return products;
+            return allProducts.filter(product => product.isActive !== false);
         }
-        return products.filter(product => product.brandId === brandId);
+        
+        // Проверяем, активен ли бренд
+        const brand = catalogData.brands.find(b => b.id === brandId);
+        if (brand && brand.isActive === false) {
+            return [];
+        }
+        
+        return allProducts.filter(product => 
+            product.brandId === brandId && product.isActive !== false
+        );
     }
 
     static async getBrandWithProducts(brandId) {
