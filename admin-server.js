@@ -151,9 +151,13 @@ function getFilesFromDirectory(dirPath, validExtensions) {
             return [];
         }
         const files = fs.readdirSync(dirPath);
+        const relativePath = dirPath.replace(path.join(__dirname, 'images', 'brands'), '/images/brands')
+                                    .replace(path.join(__dirname, 'images', 'products'), '/images/products')
+                                    .replace(path.join(__dirname, 'documents'), '/documents')
+                                    .replace(path.join(__dirname, 'posters'), '/posters');
         return files.filter(file => 
             validExtensions.includes(path.extname(file).toLowerCase())
-        ).map(file => `/${path.basename(dirPath)}/${file}`);
+        ).map(file => `${relativePath}/${file}`);
     } catch (error) {
         console.error('Error reading directory:', error);
         return [];

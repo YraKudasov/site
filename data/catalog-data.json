@@ -5,8 +5,7 @@
       "name": "Алнео",
       "title": "Алнео",
       "description": "Алюминиевые системы Алнео",
-      "image": "/images/brands/Alneo.png",
-      "isActive": true
+      "image": "/images/brands/Alneo.png"
     },
     {
       "id": "all-systems",
@@ -19,31 +18,7 @@
       "name": "TopLine",
       "title": "TopLine",
       "description": "Алюминиевые системы TopLine",
-      "image": "/images/brands/Topline.jpg",
-      "isActive": true
-    },
-    {
-      "id": "rrrrr",
-      "name": "rrrrr",
-      "title": "rrrrrrrrr",
-      "description": "rrrrrr",
-      "image": "/images/brands/1770759348525.png",
-      "isActive": true
-    },
-    {
-      "id": "SACAS",
-      "name": "ASDASD",
-      "title": "ASDASD",
-      "description": "ASDASD",
-      "image": "/images/brands/Topline_5k.jpg",
-      "isActive": true
-    },
-    {
-      "id": "sdfsdf",
-      "name": "sfsfsfs",
-      "title": "sfsfsf",
-      "description": "sfsfsfsf",
-      "image": "/images/brands/1770911228133.jpg"
+      "image": "/images/brands/Topline.jpg"
     }
   ],
   "products": [
@@ -89,8 +64,8 @@
           "value": "Класс А"
         }
       ],
-      "documentation": "/documents/1770912743547.pdf",
-      "poster": "/posters/1770926940062.pdf"
+      "documentation": "",
+      "poster": ""
     },
     {
       "id": "al45",
@@ -134,8 +109,8 @@
           "value": "Класс B"
         }
       ],
-      "documentation": "/documents/1770912743547.pdf",
-      "poster": "/posters/1770926940062.pdf"
+      "documentation": "",
+      "poster": ""
     },
     {
       "id": "topline5k",
@@ -175,8 +150,8 @@
           "value": "57 мм"
         }
       ],
-      "documentation": "/documents/1770912743547.pdf",
-      "poster": "/posters/1770926940062.pdf"
+      "documentation": "/documents/papka_5k_0224.pdf",
+      "poster": ""
     },
     {
       "id": "topline3k",
@@ -216,20 +191,8 @@
           "value": "57 мм"
         }
       ],
-      "documentation": "/documents/1770926625086.pdf",
+      "documentation": "/documents/TopLine_3k_23.05.23.pdf",
       "poster": "/posters/Plakat_TopLine_A_0_Korrekt.pdf"
-    },
-    {
-      "id": "dffdf",
-      "name": "dfdfd5656",
-      "title": "dfdfd",
-      "description": "dfdfdf",
-      "image": "/images/products/Topline_5k.jpg",
-      "brandId": "rrrrr",
-      "ctaTitle": "dfdfdf",
-      "specs": [],
-      "documentation": "/documents/1770912743547.pdf",
-      "poster": ""
     }
   ],
   "settings": {}
