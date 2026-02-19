@@ -5,7 +5,7 @@
       "name": "Алнео",
       "title": "Алнео",
       "description": "Алюминиевые системы Алнео",
-      "image": "/images/brands/Alneo.png"
+      "image": "/images/brands/Alneo.jpg"
     },
     {
       "id": "all-systems",
@@ -18,15 +18,29 @@
       "name": "TopLine",
       "title": "TopLine",
       "description": "Алюминиевые системы TopLine",
-      "image": "/images/brands/Topline.jpg"
+      "image": "/images/brands/TopLine.jpg"
+    },
+    {
+      "id": "kbe",
+      "name": "KBE",
+      "title": "KBE",
+      "description": "Оконные системы KBE",
+      "image": "/images/brands/KBE.jpg"
+    },
+    {
+      "id": "kommerling",
+      "name": "Kömmerling",
+      "title": "Kömmerling",
+      "description": "Оконные системы Kömmerling",
+      "image": "/images/brands/Kommerling.jpg"
     }
   ],
   "products": [
     {
       "id": "alt72",
-      "name": "ALT 72",
-      "title": "ALT 72",
-      "description": "Высококачественная алюминиевая система с терморазрывом для окон и дверей",
+      "name": "Алнео ALT 72",
+      "title": "Алнео ALT 72",
+      "description": "Алюминиевая система Алнео",
       "image": "/images/products/Alneo_ALT_72.png",
       "brandId": "alneo",
       "ctaTitle": "Заказать окна из системы ALT 72",
@@ -69,9 +83,9 @@
     },
     {
       "id": "al45",
-      "name": "AL 45",
-      "title": "AL 45",
-      "description": "Классическая алюминиевая система для холодного остекления",
+      "name": "Алнео AL 45",
+      "title": "Алнео AL 45",
+      "description": "Алюминиевая система Алнео",
       "image": "/images/products/Alneo_AL_45.png",
       "brandId": "alneo",
       "ctaTitle": "Заказать конструкцию из системы AL 45",
@@ -116,7 +130,7 @@
       "id": "topline5k",
       "name": "TopLine 5k",
       "title": "TopLine 5k",
-      "description": "Алюминиевая система для холодного остекления",
+      "description": "Профильная система TopLine",
       "image": "/images/products/Topline_5k.jpg",
       "brandId": "topline",
       "ctaTitle": "Заказать конструкцию из системы TopLine 5k",
@@ -157,7 +171,7 @@
       "id": "topline3k",
       "name": "TopLine 3k",
       "title": "TopLine 3k",
-      "description": "Алюминиевая система для холодного остекления",
+      "description": "Профильная система TopLine",
       "image": "/images/products/Topline_3k.jpg",
       "brandId": "topline",
       "ctaTitle": "Заказать конструкцию из системы TopLine 3k",
@@ -193,6 +207,177 @@
       ],
       "documentation": "/documents/TopLine_3k_23.05.23.pdf",
       "poster": "/posters/Plakat_TopLine_A_0_Korrekt.pdf"
+    },
+    {
+      "id": "kbeexpert",
+      "name": "KBE Expert",
+      "title": "KBE Expert",
+      "description": "Профильная система KBE",
+      "image": "/images/products/KBE_Expert.png",
+      "brandId": "kbe",
+      "ctaTitle": "Заказать конструкцию из системы KBE Expert",
+      "specs": [
+        {
+          "name": "Монтажная ширина:",
+          "value": "70 мм"
+        },
+        {
+          "name": "Максимальная толщина стеклопакета:",
+          "value": "40 мм"
+        },
+        {
+          "name": "Количество камер:",
+          "value": "рама 5 / створка 5 / импост 4(3)"
+        },
+        {
+          "name": "Морозостойкость:",
+          "value": "до -60°C"
+        },
+        {
+          "name": "Максимальный размер створки окна:",
+          "value": "125 см × 150 см"
+        },
+        {
+          "name": "Максимальный размер створки балконные двери:",
+          "value": "90 см × 235 см"
+        },
+        {
+          "name": "Удаление фурнитурного паза:",
+          "value": "13 мм"
+        },
+        {
+          "name": "Сопротивление теплопередаче, м²·°С/Вт:",
+          "value": "0,92"
+        },
+        {
+          "name": "Ударная вязкость, кДж/м²:",
+          "value": "39,5"
+        },
+        {
+          "name": "Герметичность контуров уплотнения:",
+          "value": "соответствуют классу А"
+        },
+        {
+          "name": "Долговечность (условных лет):",
+          "value": "более 40 лет"
+        },
+        {
+          "name": "Цвет уплотнителя в стандартном исполнении:",
+          "value": "черный"
+        },
+        {
+          "name": "Экологичность:",
+          "value": "greenline (без свинца!)"
+        }
+      ],
+      "documentation": "/documents/KBE_Expert-2.pdf",
+      "poster": ""
+    },
+    {
+      "id": "kbeengine",
+      "name": "KBE Engine",
+      "title": "KBE Engine",
+      "description": "Профильная система KBE",
+      "image": "/images/products/KBE_Engine.jpg",
+      "brandId": "kbe",
+      "ctaTitle": "Заказать конструкцию из системы KBE Engine",
+      "specs": [
+        {
+          "name": "Монтажная ширина:",
+          "value": "58 мм"
+        },
+        {
+          "name": "Максимальная толщина стеклопакета:",
+          "value": "34 (50) мм"
+        },
+        {
+          "name": "Количество камер:",
+          "value": "рама 3 / створка 3 / импост 3"
+        },
+        {
+          "name": "Возможность комбинации с",
+          "value": "Да"
+        },
+        {
+          "name": "Морозостойкость:",
+          "value": "до -60°C"
+        },
+        {
+          "name": "Максимальный размер створки окна:",
+          "value": "150 см × 150 см"
+        },
+        {
+          "name": "Максимальный размер створки балконные двери:",
+          "value": "90 см × 235 см"
+        },
+        {
+          "name": "Удаление фурнитурного паза:",
+          "value": "9 мм"
+        },
+        {
+          "name": "Сопротивление теплопередаче, м²·°С/Вт:",
+          "value": "0,70"
+        },
+        {
+          "name": "Герметичность контуров уплотнения:",
+          "value": "соответствуют классу А"
+        },
+        {
+          "name": "ГОСТ:",
+          "value": "23166-99"
+        },
+        {
+          "name": "Долговечность (условных лет):",
+          "value": "более 40 лет"
+        },
+        {
+          "name": "Цвет уплотнителя в стандартном исполнении:",
+          "value": "черный"
+        },
+        {
+          "name": "Экологичность:",
+          "value": "greenline (без свинца!)"
+        }
+      ],
+      "documentation": "/documents/KBE_Engine.pdf",
+      "poster": ""
+    },
+    {
+      "id": "kommerling76",
+      "name": "Kömmerling 76",
+      "title": "Kömmerling 76",
+      "description": "Профильная система Kömmerling",
+      "image": "/images/products/Kommerling_76.jpg",
+      "brandId": "kommerling",
+      "ctaTitle": "Заказать окна из системы Kömmerling 76",
+      "specs": [
+        {
+          "name": "Монтажная ширина:",
+          "value": "76 мм"
+        },
+        {
+          "name": "Толщина стеклопакета:",
+          "value": "до 50 мм"
+        },
+        {
+          "name": "Мах. размер створки окна:",
+          "value": "1500 (в) * 1500 (ш)"
+        },
+        {
+          "name": "Сопротивление теплопередаче, м²·°С/Вт:",
+          "value": "1,02"
+        },
+        {
+          "name": "Количество камер:",
+          "value": "рама 5 / створка 5"
+        },
+        {
+          "name": "Мах. размер створки балконной двери:",
+          "value": "2500 (в) * 1000 (ш)"
+        }
+      ],
+      "documentation": "/documents/Kommerling_76_Brochure.pdf",
+      "poster": ""
     }
   ],
   "settings": {}

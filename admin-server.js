@@ -254,9 +254,14 @@ const server = http.createServer((req, res) => {
                         return;
                     }
                     
-                    // Generate unique filename
-                    const timestamp = Date.now();
-                    const uniqueFileName = `${timestamp}${fileExt}`;
+                    // Preserve original filename (with safety checks for collisions)
+                    let originalFileName = path.basename(fileName, fileExt);
+                    let uniqueFileName = fileName;
+                    let counter = 1;
+                    while (fs.existsSync(path.join(__dirname, 'images', 'brands', uniqueFileName))) {
+                        uniqueFileName = `${originalFileName}_${counter}${fileExt}`;
+                        counter++;
+                    }
                     const savePath = path.join(__dirname, 'images', 'brands', uniqueFileName);
                     
                     // Extract and save file data
@@ -323,9 +328,14 @@ const server = http.createServer((req, res) => {
                         return;
                     }
                     
-                    // Generate unique filename
-                    const timestamp = Date.now();
-                    const uniqueFileName = `${timestamp}${fileExt}`;
+                    // Preserve original filename (with safety checks for collisions)
+                    let originalFileName = path.basename(fileName, fileExt);
+                    let uniqueFileName = fileName;
+                    let counter = 1;
+                    while (fs.existsSync(path.join(__dirname, 'images', 'products', uniqueFileName))) {
+                        uniqueFileName = `${originalFileName}_${counter}${fileExt}`;
+                        counter++;
+                    }
                     const savePath = path.join(__dirname, 'images', 'products', uniqueFileName);
                     
                     // Extract and save file data
@@ -719,7 +729,9 @@ const server = http.createServer((req, res) => {
         if (req.url === '/') {
             filePath = path.join(__dirname, 'admin.html');
         } else {
-            filePath = path.join(__dirname, req.url.substring(1));
+            // Remove query parameters from URL
+            const cleanUrl = req.url.split('?')[0];
+            filePath = path.join(__dirname, cleanUrl.substring(1));
         }
 
         const extname = String(path.extname(filePath)).toLowerCase();
