@@ -37,4 +37,6 @@ build/
 
 # Temporary files
 *.tmp
-*.temp
+*.temp"# Temporary test files"  
+"test-data-load.html"  
+"test-photo-display.html"  
