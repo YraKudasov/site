@@ -8,7 +8,8 @@ async function loadSalesSpecialists() {
     try {
         const response = await fetch('data/sales-specialists.json');
         salesSpecialists = await response.json();
-        renderSpecialists(salesSpecialists);
+        // При инициализации список менеджеров пуст
+        renderSpecialists([]);
         populateCities();
     } catch (error) {
         console.error('Error loading sales specialists data:', error);
@@ -19,33 +20,37 @@ async function loadSalesSpecialists() {
 function populateCities() {
     const oblastSelect = document.getElementById('oblast');
     const citySelect = document.getElementById('city');
+    const cityGroup = document.querySelector('.filter-group:nth-child(2)');
     const selectedOblast = oblastSelect.value;
     
-    // Clear cities dropdown except first option
-    citySelect.innerHTML = '<option value="">-- Все города --</option>';
-    
-    if (!selectedOblast) {
-        populateDistricts();
-        return;
-    }
-    
-    // Get unique cities for selected oblast
-    const cities = new Set();
-    salesSpecialists.forEach(specialist => {
-        specialist.regions.forEach(region => {
-            if (region.oblast === selectedOblast && region.city) {
-                cities.add(region.city);
-            }
+    // Show/hide city filter
+    if (selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.') {
+        cityGroup.style.display = 'none';
+        citySelect.value = '';
+    } else {
+        cityGroup.style.display = 'flex';
+        cityGroup.style.flexDirection = 'column';
+        // Clear cities dropdown except first option
+        citySelect.innerHTML = '<option value="">-- Выберите город --</option>';
+        
+        // Get unique cities for selected oblast
+        const cities = new Set();
+        salesSpecialists.forEach(specialist => {
+            specialist.regions.forEach(region => {
+                if (region.oblast === selectedOblast && region.city) {
+                    cities.add(region.city);
+                }
+            });
         });
-    });
-    
-    // Add cities to dropdown
-    Array.from(cities).sort().forEach(city => {
-        const option = document.createElement('option');
-        option.value = city;
-        option.textContent = city;
-        citySelect.appendChild(option);
-    });
+        
+        // Add cities to dropdown
+        Array.from(cities).sort().forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            citySelect.appendChild(option);
+        });
+    }
     
     populateDistricts();
 }
@@ -59,10 +64,20 @@ function populateDistricts() {
     const selectedCity = citySelect.value;
     
     // Clear districts dropdown except first option
-    districtSelect.innerHTML = '<option value="">-- Все районы --</option>';
+    districtSelect.innerHTML = '<option value="">-- Выберите район --</option>';
     
     if (!selectedOblast) {
         return;
+    }
+    
+    // Check if we need to add "Все районы" option
+    const addAllDistrictsOption = (selectedOblast === 'Волгоградская обл.' && selectedCity === 'Волжский');
+    
+    if (addAllDistrictsOption) {
+        const allDistrictsOption = document.createElement('option');
+        allDistrictsOption.value = 'Все районы';
+        allDistrictsOption.textContent = 'Все районы';
+        districtSelect.appendChild(allDistrictsOption);
     }
     
     // Get unique districts for selected oblast and city
@@ -70,7 +85,7 @@ function populateDistricts() {
     salesSpecialists.forEach(specialist => {
         specialist.regions.forEach(region => {
             if (region.oblast === selectedOblast && 
-                (!selectedCity || region.city === selectedCity)) {
+                (selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.' || (selectedCity ? region.city === selectedCity : false))) {
                 region.districts.forEach(district => {
                     if (district) {
                         districts.add(district);
@@ -99,11 +114,32 @@ function filterSpecialists() {
     const selectedCity = citySelect.value;
     const selectedDistrict = districtSelect.value;
     
+    // For Rostov or Astrakhan oblast, we only need oblast and district
+    const requiredFields = (selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.') ?
+        [selectedOblast, selectedDistrict] :
+        [selectedOblast, selectedCity, selectedDistrict];
+    
+    if (requiredFields.some(field => !field)) {
+        renderSpecialists([]);
+        return;
+    }
+    
     const filtered = salesSpecialists.filter(specialist => {
         return specialist.regions.some(region => {
-            const matchesOblast = !selectedOblast || region.oblast === selectedOblast;
-            const matchesCity = !selectedCity || region.city === selectedCity;
-            const matchesDistrict = !selectedDistrict || region.districts.includes(selectedDistrict);
+            const matchesOblast = region.oblast === selectedOblast;
+            
+            let matchesCity = true;
+            if (selectedOblast !== 'Ростовская область' && selectedOblast !== 'Астраханская обл.') {
+                matchesCity = region.city === selectedCity;
+            }
+            
+            let matchesDistrict = true;
+            if (selectedDistrict === 'Все районы') {
+                // Match any district (including empty string)
+                matchesDistrict = true;
+            } else {
+                matchesDistrict = region.districts.includes(selectedDistrict);
+            }
             
             return matchesOblast && matchesCity && matchesDistrict;
         });
@@ -117,7 +153,21 @@ function renderSpecialists(specialists) {
     const specialistsList = document.getElementById('specialists-list');
     
     if (specialists.length === 0) {
-        specialistsList.innerHTML = '<p>Нет менеджеров по продажам для выбранного региона.</p>';
+        // Determine which fields are required based on selected oblast
+        const oblastSelect = document.getElementById('oblast');
+        const citySelect = document.getElementById('city');
+        const districtSelect = document.getElementById('district');
+        const selectedOblast = oblastSelect.value;
+        
+        const allFieldsSelected = (selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.') ?
+            (selectedOblast && districtSelect.value) :
+            (selectedOblast && citySelect.value && districtSelect.value);
+        
+        if (!allFieldsSelected) {
+            specialistsList.innerHTML = '<p>Пожалуйста, выберите все необходимые поля для поиска менеджера.</p>';
+        } else {
+            specialistsList.innerHTML = '<p>Нет менеджеров по продажам для выбранного региона.</p>';
+        }
         return;
     }
     
@@ -164,6 +214,7 @@ function renderSpecialists(specialists) {
         </div>
     `).join('');
 }
+
 
 // Function to handle filter changes
 function handleFilterChange() {
