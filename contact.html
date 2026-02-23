@@ -18,25 +18,38 @@
         <section class="contact">
             <div class="container">
                 <h2>Контакты</h2>
-                <p>Выберите ваш регион в Волгоградской области, чтобы узнать контактную информацию менеджера.</p>
+                <p>Выберите ваш регион, чтобы узнать контактную информацию менеджера по продажам.</p>
                 
-                <div class="region-selector">
-                    <label for="region">Выберите регион:</label>
-                    <select id="region">
-                        <option value="">-- Выберите регион --</option>
-                        <option value="volgograd">Волгоград</option>
-                        <option value="volzhsky">Волжский</option>
-                        <option value="kamyshin">Камышин</option>
-                        <option value="mikhaylovka">Михайловка</option>
-                        <option value="uryupinsk">Урюпинск</option>
-                        <option value="frolovo">Фролово</option>
-                    </select>
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label for="oblast">Выберите область:</label>
+                        <select id="oblast">
+                            <option value="">-- Все области --</option>
+                            <option value="Волгоградская обл.">Волгоградская область</option>
+                        <option value="Астраханская обл.">Астраханская область</option>
+                            <option value="Ростовская область">Ростовская область</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="city">Выберите город:</label>
+                        <select id="city">
+                            <option value="">-- Все города --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="district">Выберите район:</label>
+                        <select id="district">
+                            <option value="">-- Все районы --</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div id="manager-info" class="manager-info" style="display: none;">
-                    <h3>Ваш менеджер</h3>
-                    <div id="manager-details">
-                        <!-- Manager details will be inserted here by JS -->
+                <div id="sales-specialists" class="sales-specialists">
+                    <h3>Менеджеры по продажам</h3>
+                    <div id="specialists-list" class="specialists-list">
+                        <!-- Sales specialists will be inserted here by JS -->
                     </div>
                 </div>
             </div>

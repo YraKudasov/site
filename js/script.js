@@ -1,68 +1,179 @@
 import ComponentsLoader from './modules/components-loader.js';
 import UIUtils from './modules/ui-utils.js';
 
-// Manager data for each region
-const managers = {
-    volgograd: {
-        name: "Алексей Сидоров",
-        position: "Менеджер по продажам",
-        phone: "+7 (8442) 123-456",
-        email: "sidorov@bimaxpro.ru"
-    },
-    volzhsky: {
-        name: "Мария Петрова",
-        position: "Технический директор",
-        phone: "+7 (8443) 654-321",
-        email: "petrova@bimaxpro.ru"
-    },
-    kamyshin: {
-        name: "Иван Иванов",
-        position: "Генеральный директор",
-        phone: "+7 (84457) 987-654",
-        email: "ivanov@bimaxpro.ru"
-    },
-    mikhaylovka: {
-        name: "Елена Кузнецова",
-        position: "Менеджер по работе с клиентами",
-        phone: "+7 (84463) 456-789",
-        email: "kuznetsova@bimaxpro.ru"
-    },
-    uryupinsk: {
-        name: "Дмитрий Смирнов",
-        position: "Региональный менеджер",
-        phone: "+7 (84442) 321-987",
-        email: "smirnov@bimaxpro.ru"
-    },
-    frolovo: {
-        name: "Анна Волкова",
-        position: "Региональный менеджер",
-        phone: "+7 (84465) 789-123",
-        email: "volkova@bimaxpro.ru"
-    }
-};
+// Load sales specialists data
+let salesSpecialists = [];
 
-// Function to handle region selection
-function handleRegionChange() {
-    const regionSelect = document.getElementById('region');
-    const managerInfo = document.getElementById('manager-info');
-    const managerDetails = document.getElementById('manager-details');
-    
-    const selectedRegion = regionSelect.value;
-    
-    if (selectedRegion && managers[selectedRegion]) {
-        const manager = managers[selectedRegion];
-        managerDetails.innerHTML = `
-            <p><strong>Имя:</strong> ${manager.name}</p>
-            <p><strong>Должность:</strong> ${manager.position}</p>
-            <p><strong>Телефон:</strong> <a href="tel:${manager.phone}">${manager.phone}</a></p>
-            <p><strong>Email:</strong> <a href="mailto:${manager.email}">${manager.email}</a></p>
-        `;
-        managerInfo.style.display = 'block';
-    } else {
-        managerInfo.style.display = 'none';
+async function loadSalesSpecialists() {
+    try {
+        const response = await fetch('data/sales-specialists.json');
+        salesSpecialists = await response.json();
+        renderSpecialists(salesSpecialists);
+        populateCities();
+    } catch (error) {
+        console.error('Error loading sales specialists data:', error);
     }
 }
 
+// Function to populate cities dropdown based on selected oblast
+function populateCities() {
+    const oblastSelect = document.getElementById('oblast');
+    const citySelect = document.getElementById('city');
+    const selectedOblast = oblastSelect.value;
+    
+    // Clear cities dropdown except first option
+    citySelect.innerHTML = '<option value="">-- Все города --</option>';
+    
+    if (!selectedOblast) {
+        populateDistricts();
+        return;
+    }
+    
+    // Get unique cities for selected oblast
+    const cities = new Set();
+    salesSpecialists.forEach(specialist => {
+        specialist.regions.forEach(region => {
+            if (region.oblast === selectedOblast && region.city) {
+                cities.add(region.city);
+            }
+        });
+    });
+    
+    // Add cities to dropdown
+    Array.from(cities).sort().forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        citySelect.appendChild(option);
+    });
+    
+    populateDistricts();
+}
+
+// Function to populate districts dropdown based on selected oblast and city
+function populateDistricts() {
+    const oblastSelect = document.getElementById('oblast');
+    const citySelect = document.getElementById('city');
+    const districtSelect = document.getElementById('district');
+    const selectedOblast = oblastSelect.value;
+    const selectedCity = citySelect.value;
+    
+    // Clear districts dropdown except first option
+    districtSelect.innerHTML = '<option value="">-- Все районы --</option>';
+    
+    if (!selectedOblast) {
+        return;
+    }
+    
+    // Get unique districts for selected oblast and city
+    const districts = new Set();
+    salesSpecialists.forEach(specialist => {
+        specialist.regions.forEach(region => {
+            if (region.oblast === selectedOblast && 
+                (!selectedCity || region.city === selectedCity)) {
+                region.districts.forEach(district => {
+                    if (district) {
+                        districts.add(district);
+                    }
+                });
+            }
+        });
+    });
+    
+    // Add districts to dropdown
+    Array.from(districts).sort().forEach(district => {
+        const option = document.createElement('option');
+        option.value = district;
+        option.textContent = district;
+        districtSelect.appendChild(option);
+    });
+}
+
+// Function to filter specialists based on selected filters
+function filterSpecialists() {
+    const oblastSelect = document.getElementById('oblast');
+    const citySelect = document.getElementById('city');
+    const districtSelect = document.getElementById('district');
+    
+    const selectedOblast = oblastSelect.value;
+    const selectedCity = citySelect.value;
+    const selectedDistrict = districtSelect.value;
+    
+    const filtered = salesSpecialists.filter(specialist => {
+        return specialist.regions.some(region => {
+            const matchesOblast = !selectedOblast || region.oblast === selectedOblast;
+            const matchesCity = !selectedCity || region.city === selectedCity;
+            const matchesDistrict = !selectedDistrict || region.districts.includes(selectedDistrict);
+            
+            return matchesOblast && matchesCity && matchesDistrict;
+        });
+    });
+    
+    renderSpecialists(filtered);
+}
+
+// Function to render sales specialists
+function renderSpecialists(specialists) {
+    const specialistsList = document.getElementById('specialists-list');
+    
+    if (specialists.length === 0) {
+        specialistsList.innerHTML = '<p>Нет менеджеров по продажам для выбранного региона.</p>';
+        return;
+    }
+    
+    // Remove duplicates (same specialist can appear in multiple regions)
+    const uniqueSpecialists = [];
+    const seenNames = new Set();
+    specialists.forEach(specialist => {
+        if (!seenNames.has(specialist.name)) {
+            seenNames.add(specialist.name);
+            uniqueSpecialists.push(specialist);
+        }
+    });
+    
+    specialistsList.innerHTML = uniqueSpecialists.map(specialist => `
+        <div class="specialist-card">
+            <div class="specialist-photo">
+                <img src="${specialist.photo}" alt="${specialist.name}" onerror="this.src='images/employees/default.jpg'; this.onerror=null;">
+            </div>
+            <h4>${specialist.name}</h4>
+            <p><strong>Должность:</strong> ${specialist.position}</p>
+            <p><strong>Телефон:</strong> <a href="tel:${specialist.phone}">${specialist.phone}</a></p>
+            <div class="regions">
+                <strong>Регионы ответственности:</strong>
+                ${specialist.regions.map(region => {
+                    const oblast = region.oblast;
+                    const city = region.city;
+                    const districts = region.districts.filter(d => d).join(', ');
+                    
+                    let regionText = '';
+                    if (city) {
+                        regionText = `${oblast}, ${city}`;
+                        if (districts) {
+                            regionText += ` (${districts})`;
+                        }
+                    } else if (districts) {
+                        regionText = `${oblast}, ${districts}`;
+                    } else {
+                        regionText = oblast;
+                    }
+                    
+                    return `<div class="region-item">${regionText}</div>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Function to handle filter changes
+function handleFilterChange() {
+    if (event.target.id === 'oblast') {
+        populateCities();
+    } else if (event.target.id === 'city') {
+        populateDistricts();
+    }
+    filterSpecialists();
+}
 
 // Catalog sidebar functionality - simplified for all systems view
 function initCatalog() {
@@ -109,10 +220,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         await UIUtils.renderWindowSystemsSection();
     }
     
-    // Region selector
-    const regionSelect = document.getElementById('region');
-    if (regionSelect) {
-        regionSelect.addEventListener('change', handleRegionChange);
+    // Load and initialize sales specialists
+    if (document.querySelector('.sales-specialists')) {
+        await loadSalesSpecialists();
+        
+        // Filter event listeners
+        const oblastSelect = document.getElementById('oblast');
+        const citySelect = document.getElementById('city');
+        const districtSelect = document.getElementById('district');
+        
+        if (oblastSelect) {
+            oblastSelect.addEventListener('change', handleFilterChange);
+        }
+        if (citySelect) {
+            citySelect.addEventListener('change', handleFilterChange);
+        }
+        if (districtSelect) {
+            districtSelect.addEventListener('change', handleFilterChange);
+        }
     }
 
     // Catalog functionality

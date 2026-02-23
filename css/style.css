@@ -515,66 +515,166 @@ section {
 }
 
 /* Contact section */
-.region-selector {
+.filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
     margin: 3rem 0;
-    text-align: center;
 }
 
-.region-selector label {
-    display: block;
-    margin-bottom: 1rem;
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    margin-bottom: 0.75rem;
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #2c3e50;
 }
 
-#region {
+.filter-group select {
     padding: 1rem;
     font-size: 1.1rem;
     border: 2px solid #e1e8ed;
     border-radius: 10px;
-    width: 100%;
-    max-width: 350px;
     background: #fff;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-#region:focus {
+.filter-group select:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 4px 20px rgba(52, 152, 219, 0.3);
 }
 
-.manager-info {
+.sales-specialists {
     margin-top: 3rem;
+}
+
+.sales-specialists h3 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.specialists-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.specialist-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     padding: 2rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 15px;
-    border-left: 4px solid #3498db;
-    animation: slideIn 0.5s ease-out;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
 }
 
-.manager-info h3 {
-    color: #3498db;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+.specialist-photo,
+.specialist-card h4 {
+    text-align: center;
 }
 
-.manager-info p {
+.specialist-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+}
+
+.specialist-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.specialist-photo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+}
+
+.specialist-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.specialist-card:hover .specialist-photo img {
+    transform: scale(1.1);
+}
+
+.specialist-card h4 {
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.specialist-card p {
+    color: #7f8c8d;
+    font-weight: 500;
     margin: 0.5rem 0;
-    font-size: 1.1rem;
 }
 
-.manager-info a {
+.specialist-card a {
     color: #3498db;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.manager-info a:hover {
+.specialist-card a:hover {
     color: #2980b9;
+}
+
+.regions {
+    margin-top: 1rem;
+}
+
+.regions strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.region-item {
+    background: rgba(52, 152, 219, 0.05);
+    border-left: 3px solid #3498db;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+.region-item:hover {
+    background: rgba(52, 152, 219, 0.1);
+    transform: translateX(5px);
 }
 
 @keyframes slideIn {
