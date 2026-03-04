@@ -1,0 +1,262 @@
+/* Employees section styles */
+.employees-section {
+    margin-top: 2rem;
+}
+
+#employees-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.department {
+    background: rgba(248, 249, 250, 0.8);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.department:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.department h4 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+    text-align: center;
+}
+
+.employees-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.employee-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    gap: 1rem;
+}
+
+.employee-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.employee-photo {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e9ecef;
+}
+
+.employee-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.employee-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.employee-name {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-position {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.employee-phone {
+    margin-bottom: 0.75rem;
+}
+
+.employee-phone a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.employee-phone a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.employee-regions {
+    background: rgba(52, 152, 219, 0.05);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.region-info {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #555;
+}
+
+.region-oblast {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.region-city {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.region-districts {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.employee-contact-link {
+    text-align: right;
+}
+
+.employee-contact-link a {
+    display: inline-block;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+}
+
+/* Department contact button */
+.department-contact-button {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.common-contact-button {
+    display: inline-block;
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.common-contact-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    background: linear-gradient(45deg, #2980b9, #3498db);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .employees-list {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .employee-card {
+        padding: 1rem;
+    }
+    
+    .employee-photo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .employee-name {
+        font-size: 0.95rem;
+    }
+    
+    .employee-position {
+        font-size: 0.85rem;
+    }
+    
+    .employee-phone a {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .department {
+        padding: 1rem;
+    }
+    
+    .department h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .employee-card {
+        padding: 0.875rem;
+        gap: 0.75rem;
+    }
+    
+    .employee-photo {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .employee-name {
+        font-size: 0.9rem;
+    }
+    
+    .employee-position {
+        font-size: 0.8rem;
+    }
+    
+    .employee-phone a {
+        font-size: 0.8rem;
+    }
+    
+    .employee-regions {
+        padding: 0.5rem;
+    }
+    
+    .region-info {
+        font-size: 0.8rem;
+    }
+    
+    .region-districts {
+        font-size: 0.75rem;
+    }
+    
+    .employee-contact-link a {
+        padding: 0.35rem 0.875rem;
+        font-size: 0.8rem;
+    }
+}

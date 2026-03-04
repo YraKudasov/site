@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/employees.css">
 </head>
 <body>
     <div class="header-container">
@@ -34,9 +35,96 @@
                 
                 <h3>Наша продукция</h3>
                 <p>Мы предлагаем окна из различных материалов: ПВХ, дерева, алюминия. Все изделия соответствуют современным стандартам и требованиям к энергоэффективности.</p>
+                
+                <h3>Наша команда</h3>
+                <div class="employees-section">
+                    <div id="employees-container"></div>
+                </div>
             </div>
         </section>
     </main>
+
+    <script>
+        // Загрузка и отображение сотрудников
+        async function loadEmployees() {
+            try {
+                const response = await fetch('data/employees.json');
+                const employeesData = await response.json();
+                const container = document.getElementById('employees-container');
+                
+                employeesData.forEach(department => {
+                    const departmentDiv = document.createElement('div');
+                    departmentDiv.className = 'department';
+                    
+                    const departmentTitle = document.createElement('h4');
+                    departmentTitle.textContent = department.department;
+                    departmentDiv.appendChild(departmentTitle);
+                    
+                    const employeesList = document.createElement('div');
+                    employeesList.className = 'employees-list';
+                    
+                    department.employees.forEach(employee => {
+                        const employeeCard = document.createElement('div');
+                        employeeCard.className = 'employee-card';
+                        
+                        // Фото сотрудника
+                        const photoDiv = document.createElement('div');
+                        photoDiv.className = 'employee-photo';
+                        const photo = document.createElement('img');
+                        photo.src = employee.photo;
+                        photo.alt = employee.name;
+                        photoDiv.appendChild(photo);
+                        employeeCard.appendChild(photoDiv);
+                        
+                        // Информация о сотруднике
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'employee-info';
+                        
+                        const name = document.createElement('div');
+                        name.className = 'employee-name';
+                        name.textContent = employee.name;
+                        infoDiv.appendChild(name);
+                        
+                        const position = document.createElement('div');
+                        position.className = 'employee-position';
+                        position.textContent = employee.position;
+                        infoDiv.appendChild(position);
+                        
+                        const phone = document.createElement('div');
+                        phone.className = 'employee-phone';
+                        const phoneLink = document.createElement('a');
+                        phoneLink.href = `tel:${employee.phone.replace(/[^0-9]/g, '')}`;
+                        phoneLink.textContent = employee.phone;
+                        phone.appendChild(phoneLink);
+                        infoDiv.appendChild(phone);
+                        
+                        employeeCard.appendChild(infoDiv);
+                        employeesList.appendChild(employeeCard);
+                    });
+                    
+                    departmentDiv.appendChild(employeesList);
+                    
+                    // Для отдела менеджеров по продажам добавляем общую кнопку
+                    if (department.department === 'Менеджеры по продажам') {
+                        const contactButtonDiv = document.createElement('div');
+                        contactButtonDiv.className = 'department-contact-button';
+                        const contactButton = document.createElement('a');
+                        contactButton.href = 'contact.html';
+                        contactButton.textContent = 'Свяжитесь с менеджером';
+                        contactButton.className = 'common-contact-button';
+                        contactButtonDiv.appendChild(contactButton);
+                        departmentDiv.appendChild(contactButtonDiv);
+                    }
+                    container.appendChild(departmentDiv);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки данных о сотрудниках:', error);
+            }
+        }
+        
+        // Загрузка сотрудников при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadEmployees);
+    </script>
 
     <div class="footer-container">
         <!-- Футер загружается динамически -->

@@ -1,0 +1,121 @@
+[
+  {
+    "department": "Управление",
+    "employees": [
+      {
+        "name": "Алимов Алексей",
+        "position": "Генеральный директор",
+        "phone": "8-903-374-80-80",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Кудасов Владислав",
+        "position": "Коммерческий директор",
+        "phone": "8-961-674-05-49",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Менеджеры по продажам",
+    "employees": [
+      {
+        "name": "Машанов Альберт",
+        "position": "Менеджер по продажам",
+        "phone": "8-960-893-20-35",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Кириченко Виктор",
+        "position": "Менеджер по продажам",
+        "phone": "8-960-892-04-40",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Прудников Алексей",
+        "position": "Менеджер по продажам",
+        "phone": "8-905-482-30-70",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Леонтьев Роман",
+        "position": "Менеджер по продажам",
+        "phone": "8-903-479-97-97",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Германов Алексей",
+        "position": "Менеджер по продажам",
+        "phone": "8-909-378-06-41",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Финансово-бухгалтерский отдел",
+    "employees": [
+      {
+        "name": "Кочкарева Мария",
+        "position": "Финансово-бухгалтерский отдел",
+        "phone": "8-906-400-63-78",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Техническая служба",
+    "employees": [
+      {
+        "name": "Полетаев Евгений",
+        "position": "Технический служба",
+        "phone": "8-960-893-19-03",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Щукин Пётр",
+        "position": "Техническая служба (специалист по снабжению)",
+        "phone": "8-903-479-53-35",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Отдел логистики",
+    "employees": [
+      {
+        "name": "Морозова Елена",
+        "position": "Отдел логистики",
+        "phone": "8-903-479-92-29",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Расчётный отдел",
+    "employees": [
+      {
+        "name": "Щербинина Мария",
+        "position": "Инженер-конструктор",
+        "phone": "8-937-106-05-06",
+        "photo": "images/employees/saler_photo.avif"
+      },
+      {
+        "name": "Карелина Светлана",
+        "position": "Инженер-конструктор",
+        "phone": "8-937-106-05-06",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  },
+  {
+    "department": "Сервис",
+    "employees": [
+      {
+        "name": "Плешаков Фёдор",
+        "position": "Сервисный инженер",
+        "phone": "8-960-891-60-80",
+        "photo": "images/employees/saler_photo.avif"
+      }
+    ]
+  }
+]
