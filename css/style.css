@@ -240,92 +240,53 @@ main {
 
 /* Hero section */
 .hero {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
-    color: white;
-    padding: 6rem 0;
-    text-align: center;
     position: relative;
     overflow: hidden;
-    min-height: 70vh;
+    min-height: 80vh;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-.hero::before {
-    content: '';
+.hero-background {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    animation: changeBackground 24s infinite;
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
-.hero::after {
-    content: '';
+.hero-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7));
-    z-index: -1;
-}
-
-@keyframes changeBackground {
-    0% {
-        background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop');
-        opacity: 1;
-    }
-    20% {
-        background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    25% {
-        background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    45% {
-        background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&h=1080&fit=crop');
-        opacity: 1;
-    }
-    50% {
-        background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    55% {
-        background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    75% {
-        background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop');
-        opacity: 1;
-    }
-    80% {
-        background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    85% {
-        background-image: url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
-    95% {
-        background-image: url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&h=1080&fit=crop');
-        opacity: 1;
-    }
-    100% {
-        background-image: url('https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1920&h=1080&fit=crop');
-        opacity: 0.3;
-    }
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+    z-index: 1;
 }
 
 .hero .container {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    width: 100%;
+}
+
+.hero-content {
+    text-align: left;
+    color: white;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0;
+    margin-left: 5%;
 }
 
 .hero h2 {
@@ -341,31 +302,29 @@ main {
     font-weight: 300;
     margin-bottom: 3rem;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
     animation: fadeInUp 1s ease-out 0.2s both;
+    line-height: 1.8;
 }
 
 .btn {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    background: linear-gradient(45deg, #3498db, #2980b9);
     color: white;
     padding: 1rem 3rem;
     text-decoration: none;
-    border-radius: 50px;
+    border-radius: 25px;
     font-weight: 600;
     font-size: 1.1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: none;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
     animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(45deg, #2980b9, #21618c);
     transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 
 @keyframes fadeInUp {
@@ -2466,6 +2425,11 @@ footer p {
 
     .hero {
         padding: 4rem 0;
+        min-height: 60vh;
+    }
+
+    .hero-content {
+        padding: 1rem;
     }
 
     .hero h2 {
