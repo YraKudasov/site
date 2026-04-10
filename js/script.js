@@ -305,7 +305,51 @@ document.addEventListener('DOMContentLoaded', async function() {
             toggle.classList.remove('active');
         });
     }
+
+    // Gallery slider functionality
+    if (document.querySelector('.gallery')) {
+        initGallerySlider();
+    }
 });
+
+// Gallery slider
+function initGallerySlider() {
+    const slides = document.querySelectorAll('.gallery-slide');
+    const prevBtn = document.getElementById('gallery-prev');
+    const nextBtn = document.getElementById('gallery-next');
+    const counter = document.getElementById('gallery-counter');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlider() {
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active');
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            }
+        });
+        
+        const current = String(currentSlide + 1).padStart(2, '0');
+        const total = String(totalSlides).padStart(2, '0');
+        counter.textContent = `${current}/${total}`;
+    }
+
+    prevBtn.addEventListener('click', function() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    });
+
+    nextBtn.addEventListener('click', function() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+    });
+
+    // Auto slide every 5 seconds
+    setInterval(function() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+    }, 5000);
+}
 
 // Handle window resize to manage dropdown behavior
 window.addEventListener('resize', function() {
