@@ -92,6 +92,7 @@ body {
     color: #2c3e50;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     min-height: 100vh;
+    padding-top: 112px;
 }
 
 .container {
@@ -105,9 +106,11 @@ header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
