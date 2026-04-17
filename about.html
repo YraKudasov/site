@@ -6,9 +6,457 @@
     <title>О компании - Bimax Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/employees.css">
+    <style>
+        /* Hero Section для страницы о компании - в стиле основного сайта */
+        .about-hero {
+            position: relative;
+            padding: 100px 0 80px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f0fe 100%);
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(41, 128, 185, 0.08) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .about-hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 50px;
+            color: #2980b9;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            line-height: 1.7;
+            color: #5a6c7d;
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        /* Advantages section */
+        .advantages-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: #3498db;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 50px;
+        }
+
+        .advantage-card {
+            background: white;
+            border-radius: 20px;
+            padding: 36px 28px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2980b9, #1a5276);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.15);
+        }
+
+        .advantage-card:hover::before {
+            opacity: 1;
+        }
+
+        .advantage-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 24px;
+        }
+
+        .advantage-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+
+        .advantage-description {
+            font-size: 15px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Mission section */
+        .mission-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .mission-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .mission-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .mission-content {
+            text-align: left;
+        }
+
+        .mission-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #2c3e50;
+        }
+
+        .mission-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #5a6c7d;
+        }
+
+        @media (max-width: 768px) {
+            .mission-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .mission-content {
+                text-align: center;
+            }
+        }
+
+        /* Team section */
+        .team-section {
+            padding: 80px 0;
+        }
+
+        .department {
+            margin-bottom: 60px;
+        }
+
+        .department-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .department-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 2px;
+        }
+
+        .employees-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .employee-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.4s ease;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.12);
+        }
+
+        .employee-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            overflow: hidden;
+            border: 4px solid rgba(52, 152, 219, 0.2);
+            position: relative;
+        }
+
+        .employee-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .employee-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2c3e50;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .employee-position {
+            color: #3498db;
+            font-size: 14px;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .employee-phone a {
+            color: #7f8c8d;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .employee-phone a:hover {
+            color: #3498db;
+        }
+
+        .department-contact-button {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .common-contact-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .common-contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(52, 152, 219, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(41, 128, 185, 0.03) 100%);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 48px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(52, 152, 219, 0.35);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.45);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .stat-number {
+                font-size: 40px;
+            }
+
+            .about-hero {
+                padding: 60px 0 50px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="header-container">
@@ -16,29 +464,113 @@
     </div>
 
     <main>
-        <section class="about">
+        <!-- Hero Section -->
+        <section class="about-hero">
             <div class="container">
-                <h2>О компании Bimax Pro</h2>
-                <p>Bimax Pro - это динамично развивающаяся компания, специализирующаяся на производстве и поставке оконных конструкций в Волгоградской области. Мы работаем на рынке уже более 10 лет и завоевали доверие тысяч клиентов благодаря высокому качеству продукции и профессиональному сервису.</p>
+                <div class="hero-content">
+                    <div class="hero-badge">✅ Надёжный партнёр с 2014 года</div>
+                    <h1 class="hero-title">О компании Bimax Pro</h1>
+                    <p class="hero-description">Динамично развивающаяся компания, специализирующаяся на производстве и поставке оконных конструкций в Волгоградской области. Более 10 лет мы создаём комфорт для тысяч клиентов.</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">Лет на рынке</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10 000+</div>
+                            <div class="stat-label">Довольных клиентов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Сотрудников</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advantages Section -->
+        <section class="advantages-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label">Наши преимущества</div>
+                    <h2 class="section-title">Почему выбирают нас</h2>
+                    <p class="section-description">Более 10 лет мы совершенствуем наши процессы чтобы предоставлять вам лучшие оконные решения</p>
+                </div>
+
+                <div class="advantages-grid">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">✨</div>
+                        <h3 class="advantage-title">Высокое качество</h3>
+                        <p class="advantage-description">Используем только проверенные материалы и современное оборудование для производства</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">📋</div>
+                        <h3 class="advantage-title">Широкий ассортимент</h3>
+                        <p class="advantage-description">Окна из ПВХ, дерева, алюминия. Любые конфигурации и цветовые решения</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">🤝</div>
+                        <h3 class="advantage-title">Индивидуальный подход</h3>
+                        <p class="advantage-description">Каждому клиенту - персональный менеджер и решение под его задачи</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">🔧</div>
+                        <h3 class="advantage-title">Профессиональная установка</h3>
+                        <p class="advantage-description">Сертифицированные монтажники с опытом работы более 5 лет</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">✅</div>
+                        <h3 class="advantage-title">Гарантия качества</h3>
+                        <p class="advantage-description">Официальная гарантия на всю продукцию и монтажные работы</p>
+                    </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">⚡</div>
+                        <h3 class="advantage-title">Энергоэффективность</h3>
+                        <p class="advantage-description">Наши окна соответствуют современным стандартам энергосбережения</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="mission-section">
+            <div class="container">
+                <div class="mission-grid">
+                    <div class="mission-image">
+                        <img src="../images/team_image.webp" alt="Команда Bimax Pro">
+                    </div>
+                    <div class="mission-content">
+                        <h2 class="mission-title">Наша миссия</h2>
+                        <p class="mission-text">Предоставлять клиентам надёжные и энергоэффективные оконные решения, которые улучшают комфорт и безопасность их домов и офисов. Мы создаём окна которые служат десятилетиями и делают жизнь людей лучше.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="team-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label">Наша команда</div>
+                    <h2 class="section-title">Профессионалы своего дела</h2>
+                    <p class="section-description">Каждый сотрудник нашей команды - это эксперт с многолетним опытом работы в отрасли</p>
+                </div>
                 
-                <h3>Наша миссия</h3>
-                <p>Предоставлять клиентам надежные и энергоэффективные оконные решения, которые улучшают комфорт и безопасность их домов и офисов.</p>
-                
-                <h3>Наши преимущества</h3>
-                <ul>
-                    <li>Высокое качество материалов и производства</li>
-                    <li>Широкий ассортимент продукции</li>
-                    <li>Индивидуальный подход к каждому клиенту</li>
-                    <li>Профессиональная установка и обслуживание</li>
-                    <li>Гарантия на всю продукцию</li>
-                </ul>
-                
-                <h3>Наша продукция</h3>
-                <p>Мы предлагаем окна из различных материалов: ПВХ, дерева, алюминия. Все изделия соответствуют современным стандартам и требованиям к энергоэффективности.</p>
-                
-                <h3>Наша команда</h3>
                 <div class="employees-section">
                     <div id="employees-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Готовы обсудить ваш проект?</h2>
+                    <p class="cta-description">Свяжитесь с нами прямо сейчас и получите бесплатную консультацию и расчёт стоимости окон для вашего дома</p>
+                    <a href="contact.html" class="cta-button">Получить консультацию</a>
                 </div>
             </div>
         </section>
@@ -53,10 +585,15 @@
                 const container = document.getElementById('employees-container');
                 
                 employeesData.forEach(department => {
+                    // Отображаем только Управление и Менеджеры по продажам
+                    if (department.department !== 'Управление' && department.department !== 'Менеджеры по продажам') {
+                        return;
+                    }
                     const departmentDiv = document.createElement('div');
                     departmentDiv.className = 'department';
                     
                     const departmentTitle = document.createElement('h4');
+                    departmentTitle.className = 'department-title';
                     departmentTitle.textContent = department.department;
                     departmentDiv.appendChild(departmentTitle);
                     
