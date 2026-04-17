@@ -97,13 +97,13 @@ body {
 
 @media (max-width: 768px) {
     body {
-        padding-top: 140px;
+        padding-top: 180px;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        padding-top: 165px;
+        padding-top: 200px;
     }
 }
 
