@@ -183,9 +183,6 @@ function renderSpecialists(specialists) {
     
     specialistsList.innerHTML = uniqueSpecialists.map(specialist => `
         <div class="specialist-card">
-            <div class="specialist-photo">
-                <img src="${specialist.photo}" alt="${specialist.name}" onerror="this.src='images/employees/default.jpg'; this.onerror=null;">
-            </div>
             <h4>${specialist.name}</h4>
             <p><strong>Должность:</strong> ${specialist.position}</p>
             <p><strong>Телефон:</strong> <a href="tel:${specialist.phone}">${specialist.phone}</a></p>

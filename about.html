@@ -4,456 +4,293 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>О компании - БИМАКС ПРО</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/employees.css">
     <style>
-        /* Hero Section для страницы о компании - в стиле основного сайта */
+        /* Hero */
         .about-hero {
             position: relative;
-            padding: 100px 0 80px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8f0fe 100%);
-            overflow: hidden;
-        }
-
-        .about-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(41, 128, 185, 0.08) 0%, transparent 50%);
-            z-index: 0;
-        }
-
-        .about-hero .container {
-            position: relative;
-            z-index: 1;
+            padding: 80px 0 70px;
+            background: #fff;
+            border-bottom: 1px solid #edf0f3;
         }
 
         .hero-content {
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 820px;
         }
 
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 24px;
-            background: rgba(52, 152, 219, 0.1);
-            border: 1px solid rgba(52, 152, 219, 0.2);
-            border-radius: 50px;
-            color: #2980b9;
-            font-size: 14px;
+        .hero-eyebrow {
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 32px;
+            color: #3498db;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         .hero-title {
-            font-size: clamp(36px, 6vw, 56px);
-            font-weight: 800;
-            line-height: 1.1;
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 700;
+            line-height: 1.15;
             margin-bottom: 24px;
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1a2332;
         }
 
         .hero-description {
-            font-size: 20px;
+            font-size: 18px;
             line-height: 1.7;
             color: #5a6c7d;
-            max-width: 700px;
-            margin: 0 auto 48px;
+            max-width: 660px;
+            margin-bottom: 52px;
         }
 
         .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
             gap: 48px;
-            margin-top: 40px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
-            text-align: center;
-            padding: 24px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
 
         .stat-number {
-            font-size: 48px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 4px;
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a2332;
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
         .stat-label {
-            font-size: 14px;
-            color: #7f8c8d;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            color: #8898aa;
             font-weight: 500;
         }
 
-        /* Advantages section */
-        .advantages-section {
+        /* Company info section */
+        .company-section {
             padding: 80px 0;
+            background: #f4f6f8;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-label {
-            display: inline-block;
-            color: #3498db;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            line-height: 1.2;
-        }
-
-        .section-description {
-            font-size: 18px;
-            color: #7f8c8d;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        .advantages-grid {
+        .company-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            margin-top: 50px;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
         }
 
-        .advantage-card {
-            background: white;
-            border-radius: 20px;
-            padding: 36px 28px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+        .company-left h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2332;
+            margin-bottom: 20px;
         }
 
-        .advantage-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #3498db, #2980b9, #1a5276);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        .company-left p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: #4a5568;
+            margin-bottom: 16px;
         }
 
-        .advantage-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.15);
+        .company-facts {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .advantage-card:hover::before {
-            opacity: 1;
-        }
-
-        .advantage-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.05));
+        .company-facts li {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            margin-bottom: 24px;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 14px 0;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 20px;
         }
 
-        .advantage-title {
-            font-size: 20px;
+        .company-facts li:first-child {
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .fact-label {
+            font-size: 13px;
+            color: #8898aa;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .fact-value {
+            font-size: 14px;
+            color: #1a2332;
             font-weight: 600;
-            margin-bottom: 12px;
-            color: #2c3e50;
+            text-align: right;
         }
 
-        .advantage-description {
-            font-size: 15px;
-            color: #7f8c8d;
-            line-height: 1.6;
+        @media (max-width: 768px) {
+            .company-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .hero-stats {
+                gap: 32px;
+            }
         }
 
         /* Mission section */
         .mission-section {
             padding: 80px 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #fff;
         }
 
-        .mission-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
+        .mission-inner {
+            max-width: 720px;
         }
 
-        .mission-image {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .mission-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .mission-content {
-            text-align: left;
+        .mission-eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3498db;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
 
         .mission-title {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 24px;
-            color: #2c3e50;
+            color: #1a2332;
+            margin-bottom: 20px;
+            line-height: 1.2;
         }
 
         .mission-text {
-            font-size: 20px;
+            font-size: 17px;
             line-height: 1.8;
-            color: #5a6c7d;
-        }
-
-        @media (max-width: 768px) {
-            .mission-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .mission-content {
-                text-align: center;
-            }
+            color: #4a5568;
         }
 
         /* Team section */
         .team-section {
             padding: 80px 0;
+            background: #f4f6f8;
+        }
+
+        .team-header {
+            margin-bottom: 56px;
+        }
+
+        .team-eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3498db;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .team-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2332;
         }
 
         .department {
-            margin-bottom: 60px;
+            margin-bottom: 52px;
         }
 
-        .department-title {
-            font-size: 28px;
+        .department-label {
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 40px;
-            text-align: center;
-            color: #2c3e50;
-            position: relative;
-            padding-bottom: 12px;
-        }
-
-        .department-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #3498db, #2980b9);
-            border-radius: 2px;
+            color: #8898aa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
 
         .employees-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .employees-list.management {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
 
         .employee-card {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: all 0.4s ease;
-        }
-
-        .employee-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.12);
-        }
-
-        .employee-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            overflow: hidden;
-            border: 4px solid rgba(52, 152, 219, 0.2);
-            position: relative;
-        }
-
-        .employee-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            background: #fff;
+            border-radius: 8px;
+            padding: 18px 20px 18px 24px;
+            border-left: 3px solid #3498db;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .employee-name {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 4px;
-            color: #2c3e50;
-            white-space: normal;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            line-height: 1.3;
+            color: #1a2332;
         }
 
         .employee-position {
-            color: #3498db;
-            font-size: 14px;
-            margin-bottom: 16px;
+            font-size: 12px;
+            color: #8898aa;
             font-weight: 500;
         }
 
+        .employee-phone {
+            margin-top: 6px;
+        }
+
         .employee-phone a {
-            color: #7f8c8d;
+            font-size: 14px;
+            color: #3498db;
             text-decoration: none;
-            font-size: 15px;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
         .employee-phone a:hover {
+            color: #2980b9;
+        }
+
+        .sales-note {
+            margin-top: 24px;
+            font-size: 14px;
+            color: #5a6c7d;
+        }
+
+        .sales-note a {
             color: #3498db;
-        }
-
-        .department-contact-button {
-            text-align: center;
-            margin-top: 48px;
-        }
-
-        .common-contact-button {
-            display: inline-block;
-            padding: 16px 40px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.3);
+            font-weight: 500;
         }
 
-        .common-contact-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(52, 152, 219, 0.4);
+        .sales-note a:hover {
+            text-decoration: underline;
         }
 
-        /* CTA Section */
-        .cta-section {
-            padding: 80px 0;
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(41, 128, 185, 0.03) 100%);
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
+@media (max-width: 768px) {
+            .about-hero {
+                padding: 50px 0 50px;
+            }
 
-        .cta-content {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        .cta-description {
-            font-size: 18px;
-            color: #7f8c8d;
-            margin-bottom: 40px;
-            line-height: 1.7;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 18px 48px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 17px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 24px rgba(52, 152, 219, 0.35);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.45);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
             .hero-stats {
-                grid-template-columns: 1fr;
                 gap: 24px;
             }
-            
-            .hero-title {
-                font-size: 36px;
-            }
-            
-            .section-title {
-                font-size: 32px;
-            }
-            
+
             .stat-number {
-                font-size: 40px;
+                font-size: 28px;
             }
 
-            .about-hero {
-                padding: 60px 0 50px;
+            .company-section,
+            .mission-section,
+            .team-section,
+            .cta-section {
+                padding: 52px 0;
             }
         }
     </style>
@@ -464,202 +301,172 @@
     </div>
 
     <main>
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="about-hero">
             <div class="container">
                 <div class="hero-content">
-                    <div class="hero-badge">✅ Надёжный партнёр с 2014 года</div>
-                    <h1 class="hero-title">О компании БИМАКС ПРО</h1>
-                    <p class="hero-description">Динамично развивающаяся компания, специализирующаяся на производстве и поставке оконных конструкций в Волгоградской области. Более 10 лет мы создаём комфорт для тысяч клиентов.</p>
-                    
+                    <div class="hero-eyebrow">О компании</div>
+                    <h1 class="hero-title">БИМАКС ПРО — производство и поставка оконных систем</h1>
+                    <p class="hero-description">Работаем в Волгоградской области с 2014 года. Поставляем профили ведущих европейских брендов и обеспечиваем полный цикл — от подбора системы до монтажа и сервисного обслуживания.</p>
                     <div class="hero-stats">
                         <div class="stat-item">
                             <div class="stat-number">10+</div>
-                            <div class="stat-label">Лет на рынке</div>
+                            <div class="stat-label">лет на рынке</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">10 000+</div>
-                            <div class="stat-label">Довольных клиентов</div>
+                            <div class="stat-number">4</div>
+                            <div class="stat-label">бренда профилей</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="stat-label">Сотрудников</div>
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">региона охвата</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3 года</div>
+                            <div class="stat-label">гарантия на изделия</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Advantages Section -->
-        <section class="advantages-section">
+        <!-- О компании -->
+        <section class="company-section">
             <div class="container">
-                <div class="section-header">
-                    <div class="section-label">Наши преимущества</div>
-                    <h2 class="section-title">Почему выбирают нас</h2>
-                    <p class="section-description">Более 10 лет мы совершенствуем наши процессы чтобы предоставлять вам лучшие оконные решения</p>
-                </div>
-
-                <div class="advantages-grid">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">✨</div>
-                        <h3 class="advantage-title">Высокое качество</h3>
-                        <p class="advantage-description">Используем только проверенные материалы и современное оборудование для производства</p>
+                <div class="company-grid">
+                    <div class="company-left">
+                        <h2>Кто мы</h2>
+                        <p>БИМАКС ПРО — производитель и поставщик оконных конструкций для Волгоградской области. Работаем как с частными заказчиками, так и с застройщиками, управляющими компаниями и дилерами.</p>
+                        <p>В ассортименте — профильные системы KBE, Alneo, Kommerling и Topline. Под каждый объект подбираем оптимальное решение с учётом задач и бюджета.</p>
                     </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">📋</div>
-                        <h3 class="advantage-title">Широкий ассортимент</h3>
-                        <p class="advantage-description">Окна из ПВХ, дерева, алюминия. Любые конфигурации и цветовые решения</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">🤝</div>
-                        <h3 class="advantage-title">Индивидуальный подход</h3>
-                        <p class="advantage-description">Каждому клиенту - персональный менеджер и решение под его задачи</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">🔧</div>
-                        <h3 class="advantage-title">Профессиональная установка</h3>
-                        <p class="advantage-description">Сертифицированные монтажники с опытом работы более 5 лет</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">✅</div>
-                        <h3 class="advantage-title">Гарантия качества</h3>
-                        <p class="advantage-description">Официальная гарантия на всю продукцию и монтажные работы</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">⚡</div>
-                        <h3 class="advantage-title">Энергоэффективность</h3>
-                        <p class="advantage-description">Наши окна соответствуют современным стандартам энергосбережения</p>
+                    <div class="company-right">
+                        <ul class="company-facts">
+                            <li>
+                                <span class="fact-label">На рынке с</span>
+                                <span class="fact-value">2014 года</span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Бренды профилей</span>
+                                <span class="fact-value">KBE, Alneo, Kommerling, Topline</span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Регионы работы</span>
+                                <span class="fact-value">Волгоградская, Астраханская, Ростовская обл.</span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Гарантия на изделия</span>
+                                <span class="fact-value">3 года</span>
+                            </li>
+                            <li>
+                                <span class="fact-label">Срок службы профилей</span>
+                                <span class="fact-value">более 50 лет</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Mission Section -->
+        <!-- Миссия -->
         <section class="mission-section">
             <div class="container">
-                <div class="mission-grid">
-                    <div class="mission-image">
-                        <img src="images/team_image.webp" alt="Команда Bimax Pro">
-                    </div>
-                    <div class="mission-content">
-                        <h2 class="mission-title">Наша миссия</h2>
-                        <p class="mission-text">Предоставлять клиентам надёжные и энергоэффективные оконные решения, которые улучшают комфорт и безопасность их домов и офисов. Мы создаём окна которые служат десятилетиями и делают жизнь людей лучше.</p>
-                    </div>
+                <div class="mission-inner">
+                    <div class="mission-eyebrow">Наш подход</div>
+                    <h2 class="mission-title">Надёжные окна без лишних усилий со стороны клиента</h2>
+                    <p class="mission-text">Мы берём на себя весь процесс — подбор профильной системы, расчёт, производство, доставку и монтаж. Клиент получает готовый результат и трёхлетнюю гарантию. Работаем так, чтобы к одному и тому же вопросу не приходилось возвращаться дважды.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Team Section -->
+        <!-- Команда -->
         <section class="team-section">
             <div class="container">
-                <div class="section-header">
-                    <div class="section-label">Наша команда</div>
-                    <h2 class="section-title">Профессионалы своего дела</h2>
-                    <p class="section-description">Каждый сотрудник нашей команды - это эксперт с многолетним опытом работы в отрасли</p>
+                <div class="team-header">
+                    <div class="team-eyebrow">Контакты</div>
+                    <h2 class="team-title">Команда БИМАКС ПРО</h2>
                 </div>
-                
-                <div class="employees-section">
-                    <div id="employees-container"></div>
-                </div>
+
+                <div id="employees-container"></div>
             </div>
         </section>
 
-        <!-- CTA Section -->
+        <!-- CTA -->
         <section class="cta-section">
             <div class="container">
                 <div class="cta-content">
-                    <h2 class="cta-title">Готовы обсудить ваш проект?</h2>
-                    <p class="cta-description">Свяжитесь с нами прямо сейчас и получите бесплатную консультацию и расчёт стоимости окон для вашего дома</p>
-                    <a href="contact.html" class="cta-button">Получить консультацию</a>
+                    <h2 class="cta-title">Обсудим ваш проект?</h2>
+                    <p class="cta-description">Оставьте заявку — менеджер по вашему региону свяжется и рассчитает стоимость.</p>
+                    <a href="contact.html" class="cta-button">Перейти в контакты</a>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Загрузка и отображение сотрудников
         async function loadEmployees() {
             try {
                 const response = await fetch('data/employees.json');
                 const employeesData = await response.json();
                 const container = document.getElementById('employees-container');
-                
+
                 employeesData.forEach(department => {
-                    // Отображаем только Управление и Менеджеры по продажам
                     if (department.department !== 'Управление' && department.department !== 'Менеджеры по продажам') {
                         return;
                     }
+
                     const departmentDiv = document.createElement('div');
                     departmentDiv.className = 'department';
-                    
-                    const departmentTitle = document.createElement('h4');
-                    departmentTitle.className = 'department-title';
-                    departmentTitle.textContent = department.department;
-                    departmentDiv.appendChild(departmentTitle);
-                    
-                    const employeesList = document.createElement('div');
-                    employeesList.className = 'employees-list';
-                    
+
+                    const label = document.createElement('div');
+                    label.className = 'department-label';
+                    label.textContent = department.department;
+                    departmentDiv.appendChild(label);
+
+                    const isManagement = department.department === 'Управление';
+                    const list = document.createElement('div');
+                    list.className = isManagement ? 'employees-list management' : 'employees-list';
+
                     department.employees.forEach(employee => {
-                        const employeeCard = document.createElement('div');
-                        employeeCard.className = 'employee-card';
-                        
-                        // Фото сотрудника
-                        const photoDiv = document.createElement('div');
-                        photoDiv.className = 'employee-photo';
-                        const photo = document.createElement('img');
-                        photo.src = employee.photo;
-                        photo.alt = employee.name;
-                        photoDiv.appendChild(photo);
-                        employeeCard.appendChild(photoDiv);
-                        
-                        // Информация о сотруднике
-                        const infoDiv = document.createElement('div');
-                        infoDiv.className = 'employee-info';
-                        
+                        const card = document.createElement('div');
+                        card.className = 'employee-card';
+
                         const name = document.createElement('div');
                         name.className = 'employee-name';
                         name.textContent = employee.name;
-                        infoDiv.appendChild(name);
-                        
+
                         const position = document.createElement('div');
                         position.className = 'employee-position';
                         position.textContent = employee.position;
-                        infoDiv.appendChild(position);
-                        
-                        const phone = document.createElement('div');
-                        phone.className = 'employee-phone';
+
+                        const phoneDiv = document.createElement('div');
+                        phoneDiv.className = 'employee-phone';
                         const phoneLink = document.createElement('a');
-                        phoneLink.href = `tel:${employee.phone.replace(/[^0-9]/g, '')}`;
+                        phoneLink.href = `tel:${employee.phone.replace(/[^0-9+]/g, '')}`;
                         phoneLink.textContent = employee.phone;
-                        phone.appendChild(phoneLink);
-                        infoDiv.appendChild(phone);
-                        
-                        employeeCard.appendChild(infoDiv);
-                        employeesList.appendChild(employeeCard);
+                        phoneDiv.appendChild(phoneLink);
+
+                        card.appendChild(name);
+                        card.appendChild(position);
+                        card.appendChild(phoneDiv);
+                        list.appendChild(card);
                     });
-                    
-                    departmentDiv.appendChild(employeesList);
-                    
-                    // Для отдела менеджеров по продажам добавляем общую кнопку
+
+                    departmentDiv.appendChild(list);
+
                     if (department.department === 'Менеджеры по продажам') {
-                        const contactButtonDiv = document.createElement('div');
-                        contactButtonDiv.className = 'department-contact-button';
-                        const contactButton = document.createElement('a');
-                        contactButton.href = 'contact.html';
-                        contactButton.textContent = 'Свяжитесь с менеджером';
-                        contactButton.className = 'common-contact-button';
-                        contactButtonDiv.appendChild(contactButton);
-                        departmentDiv.appendChild(contactButtonDiv);
+                        const note = document.createElement('p');
+                        note.className = 'sales-note';
+                        note.innerHTML = 'Чтобы узнать менеджера по вашему населённому пункту — <a href="contact.html">перейдите в раздел Контакты</a>.';
+                        departmentDiv.appendChild(note);
                     }
+
                     container.appendChild(departmentDiv);
                 });
             } catch (error) {
-                console.error('Ошибка загрузки данных о сотрудниках:', error);
+                console.error('Ошибка загрузки сотрудников:', error);
             }
         }
-        
-        // Загрузка сотрудников при загрузке страницы
+
         document.addEventListener('DOMContentLoaded', loadEmployees);
     </script>
 

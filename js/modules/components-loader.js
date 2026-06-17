@@ -34,6 +34,8 @@ class ComponentsLoader {
             const footerContainer = document.querySelector('.footer-container');
             if (footerContainer) {
                 footerContainer.innerHTML = footerHtml;
+                const yearEl = footerContainer.querySelector('#footer-year');
+                if (yearEl) yearEl.textContent = new Date().getFullYear();
             }
         } catch (error) {
             console.error('Ошибка загрузки футера:', error);
