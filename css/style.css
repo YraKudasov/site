@@ -170,7 +170,7 @@ nav .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 2rem;
+    padding: 0.4rem 2rem;
 }
 
 .logo {
@@ -2908,7 +2908,7 @@ footer {
     }
 
     nav .container {
-        padding: 1rem 1.5rem;
+        padding: 0.4rem 1.5rem;
     }
 
     .dropdown-toggle::after {
@@ -2948,7 +2948,7 @@ footer {
 
     nav .container {
         position: relative;
-        padding: 1rem 1.5rem;
+        padding: 0.4rem 1.5rem;
     }
 
     .logo {
