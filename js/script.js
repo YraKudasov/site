@@ -50,6 +50,17 @@ function populateCities() {
             option.textContent = city;
             citySelect.appendChild(option);
         });
+
+        // Add "Район области" if there are regions without a city
+        const hasOblastDistricts = salesSpecialists.some(s =>
+            s.regions.some(r => r.oblast === selectedOblast && !r.city && r.districts.some(d => d))
+        );
+        if (hasOblastDistricts) {
+            const option = document.createElement('option');
+            option.value = '__oblast__';
+            option.textContent = 'Район области';
+            citySelect.appendChild(option);
+        }
     }
     
     populateDistricts();
@@ -70,26 +81,16 @@ function populateDistricts() {
         return;
     }
     
-    // Check if we need to add "Все районы" option
-    const addAllDistrictsOption = (selectedOblast === 'Волгоградская обл.' && selectedCity === 'Волжский');
-    
-    if (addAllDistrictsOption) {
-        const allDistrictsOption = document.createElement('option');
-        allDistrictsOption.value = 'Все районы';
-        allDistrictsOption.textContent = 'Все районы';
-        districtSelect.appendChild(allDistrictsOption);
-    }
-    
     // Get unique districts for selected oblast and city
     const districts = new Set();
     salesSpecialists.forEach(specialist => {
         specialist.regions.forEach(region => {
-            if (region.oblast === selectedOblast && 
-                (selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.' || (selectedCity ? region.city === selectedCity : false))) {
+            if (region.oblast !== selectedOblast) return;
+            const noCity = selectedOblast === 'Ростовская область' || selectedOblast === 'Астраханская обл.';
+            const cityMatch = selectedCity === '__oblast__' ? !region.city : region.city === selectedCity;
+            if (noCity || (selectedCity && cityMatch)) {
                 region.districts.forEach(district => {
-                    if (district) {
-                        districts.add(district);
-                    }
+                    if (district) districts.add(district);
                 });
             }
         });
@@ -130,16 +131,10 @@ function filterSpecialists() {
             
             let matchesCity = true;
             if (selectedOblast !== 'Ростовская область' && selectedOblast !== 'Астраханская обл.') {
-                matchesCity = region.city === selectedCity;
+                matchesCity = selectedCity === '__oblast__' ? !region.city : region.city === selectedCity;
             }
             
-            let matchesDistrict = true;
-            if (selectedDistrict === 'Все районы') {
-                // Match any district (including empty string)
-                matchesDistrict = true;
-            } else {
-                matchesDistrict = region.districts.includes(selectedDistrict);
-            }
+            let matchesDistrict = region.districts.includes(selectedDistrict);
             
             return matchesOblast && matchesCity && matchesDistrict;
         });
