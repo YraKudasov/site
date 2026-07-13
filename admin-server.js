@@ -11,20 +11,20 @@ const PORT = process.env.PORT || 3001;
 const DATA_FILE = path.join(__dirname, 'data', 'catalog-data.json');
 const JWT_SECRET = process.env.JWT_SECRET || 'bimax-pro-admin-secret-key-2024';
 const JWT_EXPIRES_IN = '1h';
+const IS_DEV = process.env.NODE_ENV !== 'production';
 
 // Users data file
 const USERS_FILE = path.join(__dirname, 'data', 'users.json');
 
-// Initialize livereload server
-const lrServer = livereload.createServer({
-  exts: ['html', 'js', 'css', 'json'],
-  delay: 100
-});
-
-// Watch the directory for changes
-lrServer.watch(path.join(__dirname));
-
-console.log('Livereload server running on port 35729');
+// Initialize livereload server only in development
+if (IS_DEV) {
+    const lrServer = livereload.createServer({
+        exts: ['html', 'js', 'css', 'json'],
+        delay: 100
+    });
+    lrServer.watch(path.join(__dirname));
+    console.log('Livereload server running on port 35729');
+}
 
 // Helper function to send JSON response
 function sendJSONResponse(res, status, data) {
@@ -774,5 +774,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.log(`Admin server running on http://localhost:${PORT}`);
     console.log('Catalog data file:', DATA_FILE);
-    console.log('Default user: admin / admbimax5');
 });

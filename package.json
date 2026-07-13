@@ -4,9 +4,8 @@
   "description": "Simple admin panel for Bimax Pro website",
   "main": "admin-server.js",
   "scripts": {
-    "start": "node admin-server.js",
-    "dev": "node admin-server.js",
-    "livereload": "node admin-server.js"
+    "start": "NODE_ENV=production node admin-server.js",
+    "dev": "node admin-server.js"
   },
   "keywords": [
     "admin",
