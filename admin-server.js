@@ -727,7 +727,7 @@ const server = http.createServer((req, res) => {
     if (req.method === 'GET') {
         let filePath = '';
         if (req.url === '/') {
-            filePath = path.join(__dirname, 'admin.html');
+            filePath = path.join(__dirname, 'index.html');
         } else {
             // Remove query parameters from URL
             const cleanUrl = req.url.split('?')[0];
