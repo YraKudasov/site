@@ -173,6 +173,11 @@ nav .container {
     padding: 0.4rem 2rem;
 }
 
+.logo-link {
+    display: inline-block;
+    line-height: 0;
+}
+
 .logo {
     height: 80px;
     width: auto;
@@ -2851,6 +2856,11 @@ footer {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: 48px;
+}
+
+.footer-brand a {
+    display: inline-block;
+    line-height: 0;
 }
 
 .footer-brand img {
