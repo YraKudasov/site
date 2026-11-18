@@ -859,6 +859,10 @@ section {
     background: #1a2332;
 }
 
+.gallery-item picture {
+    display: contents;
+}
+
 .gallery-item:nth-child(1) {
     grid-column: 1;
     grid-row: 1 / span 2;

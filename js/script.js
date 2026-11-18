@@ -327,7 +327,7 @@ function initGalleryLightbox() {
     items.forEach(item => {
         item.addEventListener('click', () => {
             const img = item.querySelector('img');
-            openLightbox(img.src, img.alt);
+            openLightbox(img.currentSrc || img.src, img.alt);
         });
     });
 
